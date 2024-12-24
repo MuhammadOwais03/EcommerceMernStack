@@ -1,0 +1,72 @@
+.service-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    border-radius: 10px;
+    margin: 1rem;
+    transition: all 0.3s;
+    gap: 7rem;
+    margin-top: 7rem;
+}
+
+.ser {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    line-height: 1px;
+}
+
+.ser img {
+    margin-bottom: 1rem;
+    width: 43.02px;
+    height: 43.02px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .service-container {
+        gap: 3rem;
+        /* Reduce gap between items */
+        padding: 1.5rem;
+    }
+
+    .ser img {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .service-container {
+        flex-direction: column;
+        /* Stack items vertically */
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .ser img {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .service-container {
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+
+    .ser img {
+        width: 28px;
+        height: 28px;
+        /* Further reduce size for smaller screens */
+    }
+
+    .ser {
+        line-height: 1.2;
+        /* Adjust spacing for text */
+    }
+}
