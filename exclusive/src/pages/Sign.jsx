@@ -1,21 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../components/styles/sign.css";
 
 function Sign() {
+  const [isSignUp, setIsSignUp] = useState(true); // State to toggle between Sign Up and Login
+
+  const toggleForm = () => {
+    setIsSignUp(!isSignUp);
+  };
+
   return (
     <div className="container">
       <div className="form-wrapper">
-        <h1 className="form-title">Sign Up —</h1>
+        <h1 className="form-title">{isSignUp ? "Sign Up —" : "Login —"}</h1>
         <form>
-          {/* Name Field */}
-          <div className="form-group">
-            <input
-              type="text"
-              placeholder="Name"
-              className="form-input"
-              required
-            />
-          </div>
+          {/* Name Field (only for Sign Up) */}
+          {isSignUp && (
+            <div className="form-group">
+              <input
+                type="text"
+                placeholder="Name"
+                className="form-input"
+                required
+              />
+            </div>
+          )}
 
           {/* Email Field */}
           <div className="form-group">
@@ -39,17 +47,27 @@ function Sign() {
 
           {/* Links */}
           <div className="form-links">
-            <a href="#" className="form-link">
-              Forgot your password?
-            </a>
-            <a href="#" className="form-link">
-              Login Here
-            </a>
+            {isSignUp ? (
+              <a href="#" className="form-link">
+                Forgot your password?
+              </a>
+            ) : (
+              <a href="#" className="form-link">
+                Forgot your password?
+              </a>
+            )}
+            <button
+              type="button"
+              className="form-link-button"
+              onClick={toggleForm}
+            >
+              {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign Up"}
+            </button>
           </div>
 
           {/* Submit Button */}
           <button type="submit" className="form-button">
-            Sign Up
+            {isSignUp ? "Sign Up" : "Login"}
           </button>
         </form>
       </div>
