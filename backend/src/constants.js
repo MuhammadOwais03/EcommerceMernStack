@@ -1,2 +1,2 @@
-export const DB_NAME = "Authentication"
+export const DB_NAME = "Ecommerce"
  

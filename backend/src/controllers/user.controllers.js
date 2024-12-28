@@ -1,40 +1,37 @@
-import userSchema from '../models/user.models.js';
-import jwt from 'jsonwebtoken';
-import asyncHandler from '../utils/asyncHandler.js'
-import ApiError from '../utils/ApiError.js'
-import ApiResponse from '../utils/ApiResponse.js'
+
+import { asyncHandler } from '../utils/asyncHandler.js';
+import { ApiError } from '../utils/ApiError.js';
+import { ApiResponse } from '../utils/ApiResponse.js';
 import { generateToken, generateAccessTokenFromRefreshToken } from '../utils/token.utils.js';
+import User from '../models/user.models.js';
 
+const userRegistration = asyncHandler(async (req, res) => {
+    const { email, name, password, password2 } = req.body;
 
-export const userRegistration = asyncHandler(async (req, res) => {
-    const { email, username, firstName, lastName, password, password2, userRole } = req.body;
-
-    if ([email, username, firstName, lastName, password, password2, userRole].some((field) => field?.trim() === "")) {
+    if ([email, name, password, password2].some((field) => field?.trim() === "")) {
         throw new ApiError(400, "All fields are required");
     }
 
-    const userExists = await userSchema.findOne({
-        $or: [{ username: username.toLowerCase() }, { email: email }]
+    const userExists = await User.findOne({
+        $or: [{ email: email }]
     });
 
     if (userExists) {
-        throw new ApiError(400, "A user with this email or username already exists");
+        throw new ApiError(400, "A user with this email already exists");
     }
 
     if (password !== password2) {
         throw new ApiError(400, "Passwords do not match");
     }
 
-    const user = await userSchema.create({
+    const user = await User.create({
         email: email,
-        username: username.toLowerCase(),
-        firstName: firstName,
-        lastName: lastName,
+        name: name.toLowerCase(),
         password: password,
-        userRole: userRole
+        userRole: "customer",
     });
 
-    const createdUser = await userSchema.findById(user._id).select("-password -refreshToken");
+    const createdUser = await User.findById(user._id).select("-password -refreshToken");
 
     if (!createdUser) {
         throw new ApiError(500, "An error occurred while creating the user");
@@ -45,34 +42,38 @@ export const userRegistration = asyncHandler(async (req, res) => {
     );
 });
 
-
-export const login = asyncHandler(async(req, res)=>{
+const login = asyncHandler(async (req, res) => {
     const { email, password, userRole } = req.body;
 
     if ([email, password, userRole].some((field) => field?.trim() === "")) {
         throw new ApiError(400, "All fields are required");
     }
 
-    const userCheck = await userSchema.findOne({
-        $or: [{ username: username.toLowerCase() }]
-    });
+    const userCheck = await User.findOne({ email: email });
 
-    if (userCheck) {
-        throw new ApiError(400, "A user with this email or username already exists");
+    if (!userCheck) {
+        throw new ApiError(400, "No user found with this email");
     }
 
-    const passCheck = await userCheck.comparePassword(password)
+    const passCheck = await userCheck.comparePassword(password);
 
     if (!passCheck) {
-        throw new ApiError(401, "Invalid User Cradentials")
+        throw new ApiError(401, "Invalid User Credentials");
     }
 
-    const {accessToken, refreshToken} = generateToken(userCheck._id,userCheck.username)
+    const { accessToken, refreshToken } = await generateToken(userCheck._id, userCheck.email);
+    if (!accessToken || !refreshToken) {
+        throw new ApiError(500, "An error occurred while authenticating the user");
+    }
+    userCheck.refreshToken = refreshToken;
+    await userCheck.save();
 
     const options = {
         httpOnly: true,
         secure: false,
     };
+
+    const createdUser = await User.findById(userCheck._id).select("-password -refreshToken");
 
     return res
         .status(200)
@@ -81,9 +82,11 @@ export const login = asyncHandler(async(req, res)=>{
         .json(
             new ApiResponse(
                 200,
-                { user: userCheck},
+                { user: createdUser },
                 "User Logged In Successfully"
             )
         );
+});
 
-})
+
+export { userRegistration, login };

@@ -1,0 +1,14 @@
+https://hoppscotch.io/
+pr_id = 67704b692973c85f38db9dd3
+
+
+{
+        "_id": "676fed336178746e07c333d1",
+        "email": "owaisiqbal@gmail.com",
+        "name": "muhammad owais",
+        "userRole": "customer",
+        "cartData": {},
+        "createdAt": "2024-12-28T12:21:07.243Z",
+        "updatedAt": "2024-12-28T12:21:07.243Z",
+        "__v": 0
+    }
