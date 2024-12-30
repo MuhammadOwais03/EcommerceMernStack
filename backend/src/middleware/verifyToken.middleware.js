@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { generateAccessTokenFromRefreshToken } from '../utils/token.utils';
-import asyncHandler from '../utils/asyncHandler';
+import {asyncHandler} from '../utils/asyncHandler';
 import { ApiResponse } from '../utils/ApiResponse';
 
 const verifyToken = asyncHandler(async (req, res, next) => {

@@ -27,7 +27,14 @@ const createProduct = asyncHandler(async (req, res) => {
                 let result = await cloudinary.uploader.upload(image.path, { resource_type: "image" });
 
                 // Clean up the local image after uploading
-                fs.unlinkSync(image.path);
+
+                try {
+                    fs.unlinkSync(image.path);
+
+                }
+                catch (error) {
+                    console.log(error);
+                }
 
                 return result.secure_url; // Returning the secure URL of the uploaded image
             })
@@ -77,8 +84,45 @@ const getProducts = asyncHandler(async (req, res) => {
 })
 
 
+const singleProduct = asyncHandler(async (req, res) => {
+
+    const product = await Product.findById(req.body.id);
+
+    if (!product) {
+        return res.status(404).json({
+            success: false,
+            message: 'Product not found.'
+        });
+    }
+
+    res.status(200).json({
+        success: true,
+        product
+    });
+
+
+});
+
+
+const removeProduct = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.body.id);
+
+    if (!product) {
+        return res.status(404).json({
+            success: false,
+            message: 'Product not found.'
+        });
+    }
+
+    await product.deleteOne();
+
+    res.status(200).json({
+        success: true,
+        message: 'Product removed successfully.'
+    });
+});
 
 
 
+export { createProduct, getProducts, singleProduct, removeProduct };
 
-export { createProduct, getProducts };

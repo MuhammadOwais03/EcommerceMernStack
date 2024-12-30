@@ -4,6 +4,7 @@ import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { generateToken, generateAccessTokenFromRefreshToken } from '../utils/token.utils.js';
 import User from '../models/user.models.js';
+import jwt from 'jsonwebtoken';
 
 const userRegistration = asyncHandler(async (req, res) => {
     const { email, name, password, password2 } = req.body;
@@ -82,11 +83,52 @@ const login = asyncHandler(async (req, res) => {
         .json(
             new ApiResponse(
                 200,
-                { user: createdUser },
+                { user: createdUser, accessToken: accessToken },
                 "User Logged In Successfully"
             )
         );
 });
 
 
-export { userRegistration, login };
+
+const adminLogin = asyncHandler(async (req, res) => {
+
+    const { email, password } = req.body;
+
+    if ([email, password].some((field) => field?.trim() === "")) {
+        throw new ApiError(400, "All fields are required");
+    }
+
+    console.log(email, password);
+    if (email !== process.env.ADMIN_EMAIL && password !== process.env.ADMIN_PASSWORD) {
+        throw new ApiError(401, "Invalid User Credentials");
+    }
+
+    const token = jwt.sign(
+        process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD,
+        process.env.ACCESS_TOKEN_SECRET,
+    );
+
+    
+
+    const options = {
+        httpOnly: false,
+        secure: false,
+    };
+
+    return res
+        .status(200)
+        .cookie("token", token, options)
+        .json(
+            new ApiResponse(
+                200,
+                { token: token },
+                "Admin Logged In Successfully"
+            )
+        );
+
+
+});
+
+
+export { userRegistration, login, adminLogin };
