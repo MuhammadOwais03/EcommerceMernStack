@@ -85,22 +85,42 @@ const getProducts = asyncHandler(async (req, res) => {
 
 
 const singleProduct = asyncHandler(async (req, res) => {
+    const { id } = req.body;
+    console.log(req.body)
 
-    const product = await Product.findById(req.body.id);
-
-    if (!product) {
-        return res.status(404).json({
+    // Validate ID
+    if (!id) {
+        return res.status(400).json({
             success: false,
-            message: 'Product not found.'
+            message: 'Product ID is required.',
         });
     }
 
-    res.status(200).json({
-        success: true,
-        product
-    });
+    // Fetch Product
+    try {
+        const product = await Product.findById(id);
 
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: 'Product not found.',
+            });
+        }
 
+        res.status(200).json({
+            success: true,
+            product,
+        });
+    } catch (error) {
+        if (error.name === 'CastError') {
+            // Handle invalid ObjectID error
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid Product ID format.',
+            });
+        }
+        throw error; // Pass other errors to asyncHandler
+    }
 });
 
 

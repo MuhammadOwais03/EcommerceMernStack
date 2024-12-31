@@ -1,5 +1,5 @@
 import express from 'express';
-import { createProduct, getProducts, removeProduct } from '../controllers/product.controllers.js';
+import { createProduct, getProducts, removeProduct, singleProduct } from '../controllers/product.controllers.js';
 import { upload } from '../middleware/multer.js';
 import adminAuth from '../middleware/adminAuth.middleware.js';
 
@@ -29,5 +29,6 @@ const productRouter = express.Router();
 productRouter.post('/create',adminAuth, upload.fields(field), createProduct);
 productRouter.get('/all-product', getProducts);
 productRouter.post('/delete-product',adminAuth, removeProduct);
+productRouter.post('/single-product', singleProduct);
 
 export { productRouter };

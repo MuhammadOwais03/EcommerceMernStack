@@ -53,18 +53,19 @@ const login = asyncHandler(async (req, res) => {
     const userCheck = await User.findOne({ email: email });
 
     if (!userCheck) {
-        throw new ApiError(400, "No user found with this email");
+        
+        res.status(404).json({"No user found with this email": email, "status": 404});
     }
 
     const passCheck = await userCheck.comparePassword(password);
 
     if (!passCheck) {
-        throw new ApiError(401, "Invalid User Credentials");
+        res.status(401).json({"Invalid User Credentials": email, "status": 401});
     }
 
     const { accessToken, refreshToken } = await generateToken(userCheck._id, userCheck.email);
     if (!accessToken || !refreshToken) {
-        throw new ApiError(500, "An error occurred while authenticating the user");
+        res.status(500).json({"An error occurred while authenticating the user": email, "status": 500});
     }
     userCheck.refreshToken = refreshToken;
     await userCheck.save();
@@ -131,4 +132,24 @@ const adminLogin = asyncHandler(async (req, res) => {
 });
 
 
-export { userRegistration, login, adminLogin };
+const userDetails = asyncHandler(async (req, res)=> {
+    const {userId} = req.params;
+    const user = await User.findById(userId).select("-password -refreshToken");
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    //want to count cart count
+    let cartCount = 0;
+    
+   for (let key in user.cartData) {
+       cartCount += Object.keys(user.cartData[key]).length;
+   }
+   console.log(cartCount);
+   return res.status(200).json(new ApiResponse(200, {user:user, cartCount:cartCount}, "User details"));
+
+   
+
+})
+
+export { userRegistration, login, adminLogin, userDetails };
