@@ -5,12 +5,12 @@ import BestSellers from '../../components/BestSellers';
 import { Service } from '../../components/Service';
 
 
-const Home = () => {
+const Home = ({products}) => {
   return (
     <>
         <Hero />
-        <LatestCollections/>
-        <BestSellers/>
+        <LatestCollections products={products}/>
+        <BestSellers products={products}/>
         <Service/>
     </>
   )

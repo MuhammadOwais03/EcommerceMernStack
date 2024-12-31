@@ -1,57 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import '../../components/styles/collections.css';
 
-import p_img36 from "../assets/p_img36.png";
-import p_img40 from "../assets/p_img40.png";
-import p_img45 from "../assets/p_img45.png";
-import p_img48 from "../assets/p_img48.png";
-import p_img52 from "../assets/p_img52.png";
 import menu_icon from "../assets/menu_icon.png";
 
-const collections = [
-  {
-    image: p_img36,
-    name: "Women Zip-Front Relaxed Fit Jacket",
-    price: "$38",
-    type: "topwear",
-    category: "Womens",
-  },
-  {
-    image: p_img45,
-    name: "Men Slim Fit Relaxed Denim Jacket",
-    price: "$64",
-    type: "topwear",
-    category: "Mens",
-  },
-  {
-    image: p_img48,
-    name: "Men Slim Fit Relaxed Denim Jacket",
-    price: "$60",
-    type: "topwear",
-    category: "Mens",
-  },
-  {
-    image: p_img40,
-    name: "Men Slim Fit Relaxed Denim Jacket",
-    price: "$74",
-    type: "topwear",
-    category: "Mens",
-  },
-  {
-    image: p_img52,
-    name: "Men Slim Fit Relaxed Denim Jacket",
-    price: "$58",
-    type: "bottomwear",
-    category: "Mens",
-  },
-];
-
-const Collections = () => {
+const Collections = ({ products }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [filterCategories, setFilterCategories] = useState([]);
-  const [filterTypes, setFilterTypes] = useState([]);
-  const [filteredCollections, setFilteredCollections] = useState(collections);
-
+  const [filterSubCategories, setFilterSubCategories] = useState([]);
+  const [filteredCollections, setFilteredCollections] = useState(products);
 
   const openMenu = () => setMenuOpen(true);
   const closeMenu = () => setMenuOpen(false);
@@ -59,35 +15,41 @@ const Collections = () => {
   const filterByCategory = (e) => {
     const value = e.target.value;
 
-    if (['topwear', 'bottomwear', 'winterwear'].includes(value)) {
+    // Handling subCategory filters
+    if (['Topwear', 'Bottomwear', 'Winterwear'].includes(value)) {
       if (e.target.checked) {
-        setFilterTypes((prev) => [...prev, value]);
+        setFilterSubCategories((prev) => [...prev, value]);
       } else {
-        setFilterTypes((prev) => prev.filter((item) => item !== value));
+        setFilterSubCategories((prev) => prev.filter((subCategory) => subCategory !== value));
       }
-    } else {
+    }
+    // Handling main category filters
+    else {
       if (e.target.checked) {
         setFilterCategories((prev) => [...prev, value]);
       } else {
-        setFilterCategories((prev) => prev.filter((item) => item !== value));
+        setFilterCategories((prev) => prev.filter((category) => category !== value));
       }
     }
   };
 
-
   useEffect(() => {
-    if (filterCategories.length === 0 && filterTypes.length === 0) {
-      setFilteredCollections(collections);
+    if (!products || products.length === 0) {
+      setFilteredCollections([]);
+      return;
+    }
+
+    if (filterCategories.length === 0 && filterSubCategories.length === 0) {
+      setFilteredCollections(products); // Default to all products
     } else {
-      const filtered = collections.filter(
-        (item) =>
-          (filterTypes.length === 0 || filterTypes.includes(item.type)) &&
-          (filterCategories.length === 0 || filterCategories.includes(item.category))
+      const filtered = products.filter(
+        (product) =>
+          (filterCategories.length === 0 || filterCategories.includes(product.category)) &&
+          (filterSubCategories.length === 0 || filterSubCategories.includes(product.subCategory))
       );
       setFilteredCollections(filtered);
     }
-  }, [filterCategories, filterTypes]);
-
+  }, [filterCategories, filterSubCategories, products]);
 
   useEffect(() => {
     console.log("Filtered Collections:", filteredCollections);
@@ -105,18 +67,18 @@ const Collections = () => {
             <i className="fa-solid fa-xmark" onClick={closeMenu}></i>
             <ul>
               <li><h3>Categories</h3></li>
-              <li><input type="checkbox" value="Mens" onChange={filterByCategory} /> <p>Mens</p></li>
-              <li><input type="checkbox" value="Womens" onChange={filterByCategory} /> <p>Womens</p></li>
+              <li><input type="checkbox" value="Men" onChange={filterByCategory} /> <p>Men</p></li>
+              <li><input type="checkbox" value="Women" onChange={filterByCategory} /> <p>Women</p></li>
               <li><input type="checkbox" value="Kids" onChange={filterByCategory} /> <p>Kids</p></li>
             </ul>
           </div>
           <span className="line-filter"></span>
           <div className="filter-by-type">
             <ul>
-              <li><h3>Type</h3></li>
-              <li><input type="checkbox" value="topwear" onChange={filterByCategory} /><p>Topwear</p></li>
-              <li><input type="checkbox" value="bottomwear" onChange={filterByCategory} /><p>Bottomwear</p></li>
-              <li><input type="checkbox" value="winterwear" onChange={filterByCategory} /><p>Winterwear</p></li>
+              <li><h3>Subcategories</h3></li>
+              <li><input type="checkbox" value="Topwear" onChange={filterByCategory} /><p>Topwear</p></li>
+              <li><input type="checkbox" value="Bottomwear" onChange={filterByCategory} /><p>Bottomwear</p></li>
+              <li><input type="checkbox" value="Winterwear" onChange={filterByCategory} /><p>Winterwear</p></li>
             </ul>
           </div>
         </div>
@@ -128,23 +90,27 @@ const Collections = () => {
             <div className="sort-by">
               <select name="sort-by" id="sort-by">
                 <option value="newest">Sort by Relevant</option>
-                <option value="price">Sort by Low to High</option>
-                <option value="price">Sort by High to Low</option>
+                <option value="price_low">Sort by Low to High</option>
+                <option value="price_high">Sort by High to Low</option>
               </select>
             </div>
           </div>
           <div className="collections-flex">
-            {filteredCollections.map((item, index) => (
-              <a key={index} className="collection-card">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="collection-card-image"
-                />
-                <h3 className="collection-card-name">{item.name}</h3>
-                <p className="collection-card-price">{item.price}</p>
-              </a>
-            ))}
+            {filteredCollections.length > 0 ? (
+              filteredCollections.map((item, index) => (
+                <a key={index} className="collection-card" href={`/product/${item._id}`}>
+                  <img
+                    src={item.images ? item.images[0] : item.image}
+                    alt={item.name}
+                    className="collection-card-image"
+                  />
+                  <h3 className="collection-card-name">{item.name}</h3>
+                  <p className="collection-card-price">${item.price}</p>
+                </a>
+              ))
+            ) : (
+              <p>No products found matching the selected filters.</p>
+            )}
           </div>
         </div>
       </div>

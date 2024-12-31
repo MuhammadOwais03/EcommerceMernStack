@@ -1,68 +1,136 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../components/styles/product.css';
-import p_img45 from "../assets/p_img45.png";
-import p_img52 from "../assets/p_img52.png";
+import { useNavigate, useParams } from 'react-router-dom';
+import { fetchData, stack } from '../../server';
 
-export const Product = () => {
-    const [mainImage, setMainImage] = useState(p_img45);
+export const Product = ({userId, setCartCount}) => {
+    const { id } = useParams();
+    const [mainImage, setMainImage] = useState('');
+    const [product, setProduct] = useState({});
+    const [sizes, setSizes] = useState([]); // To store parsed sizes
+    const [selectedSize, setSelectedSize] = useState(''); // Store selected size
+    const navigation = useNavigate();
 
-    const handleImageClick = (image) => {
-        setMainImage(image);
+    useEffect(() => {
+        const data = { id: id };
+
+        fetchData('products/single-product', data, 'POST')
+            .then((response) => {
+                setProduct(response.product);
+                setMainImage(response.product.images[0]);
+            })
+            .catch((error) => {
+                console.error('Error fetching product:', error);
+            });
+    }, [id]);
+
+    useEffect(() => {
+        if (product.sizes && product.sizes.length > 0) {
+            // Assuming sizes is an array with a stringified array inside it
+            const sizesJsonString = product.sizes[0];
+            try {
+                const sizesArray = JSON.parse(sizesJsonString); // Parse the JSON string
+                setSizes(sizesArray); // Store parsed sizes in state
+            } catch (error) {
+                console.error('Error parsing sizes:', error);
+            }
+        }
+    }, [product]);
+
+    const handleAddToCart = async () => {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+            alert('Please login to add to cart');
+            stack.push('/product/' + id); // Store the current route
+            navigation('/sign'); // Redirect to the login page
+            return;
+        }
+
+        if (!selectedSize) {
+            alert('Please select a size before adding to cart');
+            return;
+        }
+
+        
+        console.log('Adding product to cart with size:', selectedSize, localStorage.getItem('userId'));
+
+        const data = {
+            userId: userId || localStorage.getItem('userId'),
+            productId: id,
+            sizeType: selectedSize,
+        };
+
+        console.log(data)
+
+        fetchData('cart/add-to-cart', data, 'POST', accessToken)
+            .then((response) => {
+                console.log(response);
+                if (response.status === 200) {
+                    setCartCount(response.cartCount);
+                    alert('Product added to cart');
+                } else {
+                    alert(response.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error adding product to cart:', error);
+            });
+        
     };
 
+    const handleSizeSelect = (size) => {
+        
+        setSelectedSize(size); // Update the selected size
+    };
+
+    if (!product.name) {
+        return <div>Loading product details...</div>;
+    }
+
     return (
-        <>
-            <div className="product-detail-container">
-                <div className="product-images-container">
-                    <div className="all-images">
-                        <div className="img-onside" onClick={() => handleImageClick(p_img45)}>
-                            <img src={p_img45} alt="" />
+        <div className="product-detail-container">
+            <div className="product-images-container">
+                <div className="all-images">
+                    {product.images?.map((image, index) => (
+                        <div className="img-onside" key={index} onClick={() => setMainImage(image)}>
+                            <img src={image} alt={`Product Image ${index + 1}`} />
                         </div>
-                        <div className="img-onside" onClick={() => handleImageClick(p_img52)}>
-                            <img src={p_img52} alt="" />
-                        </div>
-                        <div className="img-onside" onClick={() => handleImageClick(p_img45)}>
-                            <img src={p_img45} alt="" />
-                        </div>
-                        <div className="img-onside" onClick={() => handleImageClick(p_img45)}>
-                            <img src={p_img45} alt="" />
-                        </div>
-                    </div>
-                    <div className="main-image">
-                        <img src={mainImage} alt="" />
-                    </div>
+                    ))}
                 </div>
-                <div className="product-detail">
-                    <h1 className="product-name">
-                        Men Round Neck Pure Cotton T-shirt
-                    </h1>
-                    <p className="product-price">
-                        $24
-                    </p>
-                    <p className="product-description">
-                        A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.
-                    </p>
-                    <div className="size-selection">
-                        <p>Select Size</p>
-                        <div className="size-options">
-                            <div className="size-option">S</div>
-                            <div className="size-option">M</div>
-                            <div className="size-option">L</div>
-                            <div className="size-option">XL</div>
-                            <div className="size-option">XXL</div>
-                        </div>
-                    </div>
-                    <div className="cart-btn">
-                        <button>Add to Cart</button>
-                    </div>
-                    <hr />
-                    <p style={{ fontSize: "14px", color: "#8a8e91" }}>
-                        100% Original product. <br />
-                        Cash on delivery is available on this product. <br />
-                        Easy return and exchange policy within 7 days.
-                    </p>
+                <div className="main-image">
+                    <img src={mainImage} alt={product.name} />
                 </div>
             </div>
-        </>
+            <div className="product-detail">
+                <h1 className="product-name">{product.name}</h1>
+                <p className="product-price">${product.price}</p>
+                <p className="product-description">{product.description}</p>
+                <div className="size-selection">
+                    <p>Select Size</p>
+                    <div className="size-options">
+                        {sizes?.map((size, index) => (
+                            <div
+                                key={index}
+                                className={`size-option ${selectedSize === size ? 'selected' : ''}`}
+                                onClick={() => handleSizeSelect(size)}
+                            >
+                                {size}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="cart-btn">
+                    <button onClick={handleAddToCart} disabled={!selectedSize}>
+                        Add to Cart
+                    </button>
+                </div>
+                <hr />
+                <p style={{ fontSize: "14px", color: "#8a8e91" }}>
+                    100% Original product. <br />
+                    Cash on delivery is available on this product. <br />
+                    Easy return and exchange policy within 7 days.
+                </p>
+            </div>
+        </div>
     );
 };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './styles/navbar.css'; // Create a CSS file for styling
 
-const Navbar = () => {
+const Navbar = ({cartCount}) => {
     const [search, setSearch] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -31,7 +31,7 @@ const Navbar = () => {
                     <i class="fa-solid fa-bars menu-toggle" onClick={toggleMenu}></i>
                     <i className="fa-solid fa-magnifying-glass" onClick={searchOpen}></i>
                     <i className="fa-regular fa-user"></i>
-                    <i className="cart-icon"><i className="fa-solid fa-cart-shopping"></i><span className="cart-count">0</span></i>
+                    <i className="cart-icon"><i className="fa-solid fa-cart-shopping"></i><span className="cart-count">{cartCount}</span></i>
                 </div>
             </div>
             <div className={`search-input ${search ? 'active' : ''}`}>

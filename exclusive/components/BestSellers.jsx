@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import "./styles/LatestCollection.css";
 
 
@@ -9,36 +9,16 @@ import p_img45 from "../src/assets/p_img45.png";
 import p_img48 from "../src/assets/p_img48.png";
 import p_img52 from "../src/assets/p_img52.png";
 
-const collections = [
-    {
-        image: p_img36,
-        name: "Women Zip-Front Relaxed Fit Jacket",
-        price: "$38",
-    },
-    {
-        image: p_img45,
-        name: "Men Slim Fit Relaxed Denim Jacket",
-        price: "$64",
-    },
-    {
-        image: p_img48,
-        name: "Men Slim Fit Relaxed Denim Jacket",
-        price: "$60",
-    },
-    {
-        image: p_img40,
-        name: "Men Slim Fit Relaxed Denim Jacket",
-        price: "$74",
-    },
-    {
-        image: p_img52,
-        name: "Men Slim Fit Relaxed Denim Jacket",
-        price: "$58",
-    },
-    
-];
 
-const BestSellers = () => {
+
+const BestSellers = ({products}) => {
+
+     const [collections, setCollections] = useState([])
+    
+        useEffect(()=>{
+            products = products.filter(product => product.bestSellers === true)
+            setCollections(products.slice(0, 5))
+        },[])
     return (
         <div className="collections-container">
             <h2 className="collections-title">
@@ -50,9 +30,9 @@ const BestSellers = () => {
             </p>
             <div className="collections-grid">
                 {collections.map((item, index) => (
-                    <a key={index} className="collection-item">
+                    <a key={index} className="collection-item" href={`/product/${item._id}`}>
                         <img
-                            src={item.image}
+                            src={item.images[0]}
                             alt={item.name}
                             className="collection-image"
                         />
