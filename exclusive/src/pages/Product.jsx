@@ -3,7 +3,7 @@ import '../../components/styles/product.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchData, stack } from '../../server';
 
-export const Product = ({userId, setCartCount}) => {
+export const Product = ({ userId, setCartCount, setUserData, userData }) => {
     const { id } = useParams();
     const [mainImage, setMainImage] = useState('');
     const [product, setProduct] = useState({});
@@ -51,7 +51,7 @@ export const Product = ({userId, setCartCount}) => {
             return;
         }
 
-        
+
         console.log('Adding product to cart with size:', selectedSize, localStorage.getItem('userId'));
 
         const data = {
@@ -64,22 +64,43 @@ export const Product = ({userId, setCartCount}) => {
 
         fetchData('cart/add-to-cart', data, 'POST', accessToken)
             .then((response) => {
-                console.log(response);
+                console.log("API Response:", response);
+
                 if (response.status === 200) {
-                    setCartCount(response.cartCount);
+                    setCartCount(response.cartCount); // Update cart count
+                    console.log("1 - Cart count updated");
+
+                    const updatedUserData = {
+                        ...userData, // Clone existing userData
+                        cartData: response.cartData, // Update cart data
+                    };
+                    console.log("2 - Updated userData:", updatedUserData);
+
+                    setUserData(updatedUserData); // Update state with new data
+                    console.log("3 - User data state updated");
                     alert('Product added to cart');
-                } else {
-                    alert(response.message);
+                }
+
+                else if (response.statusCode === 401) {
+                    alert('Please login to add to cart');
+                    stack.push(`/product/${id}`); // Save the current route
+                    navigation('/sign'); // Redirect to login
+                }
+
+                else {
+                    alert(response.message || 'Something went wrong'); // Show error message
                 }
             })
             .catch((error) => {
-                console.error('Error adding product to cart:', error);
+                console.error("Error adding product to cart:", error);
+                alert("An error occurred while adding the product. Please try again.");
             });
-        
+
+
     };
 
     const handleSizeSelect = (size) => {
-        
+
         setSelectedSize(size); // Update the selected size
     };
 

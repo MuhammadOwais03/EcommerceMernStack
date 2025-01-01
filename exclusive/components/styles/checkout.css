@@ -1,0 +1,146 @@
+.checkout-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    flex-wrap: wrap;
+    /* Allow wrapping for smaller screens */
+}
+
+.delivery-info,
+.cart-summary {
+    width: 48%;
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+h2 span {
+    color: #333;
+}
+
+.delivery-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-row {
+    display: flex;
+    gap: 10px;
+}
+
+.cart-totals .totals-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.cart-totals .total span:first-child {
+    font-weight: bold;
+}
+
+.payment-method {
+    margin-top: 20px;
+}
+
+.payment-options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.payment-options button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    flex: 1;
+    text-align: center;
+}
+
+.payment-options button img {
+    max-width: 100px;
+    height: auto;
+}
+
+.payment-options button.active {
+    border-color: #333;
+    background-color: #f4f4f4;
+}
+
+.place-order-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.place-order-btn:hover {
+    background-color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .checkout-container {
+        flex-direction: column;
+        /* Stack elements vertically */
+    }
+
+    .delivery-info,
+    .cart-summary {
+        width: 100%;
+        /* Full width on smaller screens */
+        margin-bottom: 20px;
+        /* Add spacing between sections */
+    }
+
+    .form-row {
+        flex-direction: column;
+        /* Stack inputs vertically */
+        gap: 0;
+        /* Remove extra spacing between rows */
+    }
+
+    .payment-options button img {
+        max-width: 80px;
+        /* Reduce image size for smaller screens */
+    }
+
+    .place-order-btn {
+        font-size: 14px;
+        /* Adjust font size for smaller screens */
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 18px;
+        /* Slightly smaller headings for very small screens */
+    }
+
+    .payment-options button {
+        padding: 8px;
+        font-size: 14px;
+        /* Adjust text size */
+    }
+
+    .place-order-btn {
+        font-size: 12px;
+        /* Adjust button size for smaller screens */
+    }
+}

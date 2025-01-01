@@ -16,6 +16,8 @@ export const fetchData = async (url, data = null, method = 'GET', token = null) 
         options.headers['Authorization'] = `Bearer ${token}`;
     }
 
+    console.log(options, fullUrl)
+    console.log(fullUrl)
 
     if (data) {
         options.body = JSON.stringify(data);
@@ -28,7 +30,7 @@ export const fetchData = async (url, data = null, method = 'GET', token = null) 
         }
         return response.json();
     } catch (error) {
-        console.error('Error fetching data:', error);
+        console.log('Error fetching data:', error.message);
     }
 };
 

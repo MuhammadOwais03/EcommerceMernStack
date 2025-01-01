@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../../components/styles/cart.css";
 import p_img1 from '../assets/p_img1.png'
+import { fetchData } from "../../server";
+import { TotalContext } from "../TotalContext";
+import { Link } from "react-router-dom";
 
-const Cart = ({products}) => {
+
+const Cart = ({ products, userData, setCartCount }) => {
+    const { total, setTotal } = useContext(TotalContext);
     const [cartItems, setCartItems] = useState([
         {
             id: 1,
@@ -22,34 +27,126 @@ const Cart = ({products}) => {
         },
     ]);
 
+    useEffect(() => {
+        if (userData?.cartData && products) {
+            const items = [];
+            Object.entries(userData.cartData).forEach(([productId, sizes]) => {
+                const product = products.find((p) => p._id === productId);
+                if (product) {
+                    Object.entries(sizes).forEach(([size, quantity]) => {
+                        items.push({
+                            id: product._id,
+                            name: product.name,
+                            price: product.price,
+                            size,
+                            quantity,
+                            image: product.images[0] || 'default-image-url.png', // Provide fallback for image
+                        });
+                    });
+                }
+            });
+            setCartItems(items);
+        }
+    }, [userData, products]);
+
+
     const shippingFee = 10;
 
-    const handleQuantityChange = (id, quantity) => {
+
+
+    const handleQuantityChange = (id, size, quantity) => {
         setCartItems((prevItems) =>
             prevItems.map((item) =>
-                item.id === id ? { ...item, quantity: Math.max(quantity, 1) } : item
+                item.id === id && item.size === size
+                    ? { ...item, quantity: Math.max(quantity, 1) }
+                    : item
             )
         );
+
+        let accessToken = localStorage.getItem("accessToken");
+        let userId = localStorage.getItem("userId");
+
+        const data = {
+            userId,
+            productId: id,
+            sizeType: size,
+            quantity,
+        };
+
+
+        fetchData("cart/update-cart", data, "POST", accessToken)
+            .then((response) => {
+                if (response?.status === 200) {
+                    console.log("Cart updated successfully", response);
+
+                } else {
+                    console.error("Failed to update item quantity:", response?.message || "Unknown error");
+                }
+            })
+            .catch((error) => console.error("Error updating item:", error));
     };
 
-    const handleRemoveItem = (id) => {
-        setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+
+    const handleRemoveItem = (id, size) => {
+
+        let accessToken = localStorage.getItem('accessToken')
+        let userId = localStorage.getItem('userId')
+
+        let data = {
+            userId: userId,
+            productId: id,
+            sizeType: size
+        }
+
+
+
+        fetchData('cart/remove-cart', data, 'POST', accessToken)
+            .then((response) => {
+                if (response?.status === 200) {
+                    setCartItems((prevItems) => prevItems.filter((item) => item.id + item.size !== id + size));
+                    setCartCount(response.cartCount);
+                    console.log("Item removed successfully", response);
+                } else {
+                    console.error("Failed to remove item:", response?.message || "Unknown error");
+                }
+            })
+            .catch((error) => {
+                console.error("Error while removing item:", error);
+            });
+
+
+
     };
 
     const calculateSubtotal = () => {
-        return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+        let total = 0;
+        // return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+        cartItems.forEach((item) => {
+            total += item.price * item.quantity;
+        });
+
+        console.log(total)
+
+        return total;
     };
 
     const calculateTotal = () => {
-        return calculateSubtotal() + shippingFee;
+        const newTotal = calculateSubtotal() + shippingFee; // Compute the total
+        setTotal(newTotal); // Update the state
+        console.log(newTotal, total); // Log the newly calculated total
+        return newTotal; // Return the total value
     };
+    
+
+
+
 
     return (
         <div className="cart-page">
             <h2>Your Cart</h2>
             <div className="cart-items">
                 {cartItems.map((item) => (
-                    <div className="cart-item" key={item.id}>
+                    <div className="cart-item" key={item.id + item.size}>
                         <div className="cart-item-left">
                             <img src={item.image} alt={item.name} className="item-image" />
                             <div className="cart-item-detail">
@@ -58,18 +155,18 @@ const Cart = ({products}) => {
                                 <p>Size: {item.size}</p>
                             </div>
                         </div>
-                        <div className="cart-item-qunatity">
-                        <input
+                        <div className="cart-item-quantity">
+                            <input
                                 type="number"
                                 value={item.quantity}
                                 min="1"
-                                onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value))}
+                                onChange={(e) => handleQuantityChange(item.id, item.size, parseInt(e.target.value))}
                             />
                         </div>
                         <div className="item-details">
                             <button
                                 className="remove-button"
-                                onClick={() => handleRemoveItem(item.id)}
+                                onClick={() => handleRemoveItem(item.id, item.size)}
                             >
                                 &#128465;
                             </button>
@@ -92,7 +189,7 @@ const Cart = ({products}) => {
                     <strong>Total</strong>
                     <strong>${calculateTotal().toFixed(2)}</strong>
                 </div>
-                <button className="checkout-button">Proceed to Checkout</button>
+                <Link to="/checkout" className="checkout-button">Proceed to Checkout</Link>
             </div>
         </div>
     );

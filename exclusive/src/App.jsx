@@ -5,20 +5,25 @@ import './App.css';
 import Navbar from '../components/Navbar';
 import { Footer } from '../components/Footer';
 
+
+import OrdersList from './pages/OrdersList';
 import Home from './pages/Home';
 import Collections from './pages/Collections';
 import Login from './pages/Login';
 import { Product } from './pages/Product';
 import Sign from './pages/Sign';
 import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+
 import { fetchData } from '../server';
 
 const App = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userId ,setUserId] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [cartCount, setCartCount] = useState(0);
   const [userData, setUserData] = useState({});
+  const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
     fetchData('products/all-product')
@@ -32,16 +37,22 @@ const App = () => {
         setLoading(false); // Even on error, stop loading
       });
 
-      fetchData('users/user-details/'+localStorage.getItem('userId')).then((response) => {
-        if(response.statusCode === 200) {
-          setCartCount(response.data.cartCount);
-          setUserData(response.data.user);
-        }
-      }).catch((error) => {
-        console.error('Error fetching cart:',error);
-      });
+    fetchData('users/user-details/' + localStorage.getItem('userId'), null, 'GET', localStorage.getItem('accessToken')).then((response) => {
+      
+      console.log(response)
 
-      setUserId(localStorage.getItem('userId'));
+      if (response.statusCode === 200) {
+
+        setCartCount(response.data.cartCount);
+        setUserData(response.data.user);
+        setIsLogin(true);
+        console.log(response.data.user)
+      }
+    }).catch((error) => {
+      console.error('Error fetching cart:', error);
+    });
+
+    setUserId(localStorage.getItem('userId'));
 
   }, []);
 
@@ -57,13 +68,15 @@ const App = () => {
   return (
     <>
       <Router>
-        <Navbar cartCount={cartCount}/>
+        <Navbar cartCount={cartCount} isLogin={isLogin}/>
         <Routes>
           <Route path="/" element={<Home products={products} />} />
           <Route path="/collections" element={<Collections products={products} />} />
-          <Route path="/product/:id" element={<Product userId={userId} setCartCount={setCartCount}/>} />
+          <Route path="/product/:id" element={<Product userId={userId} setCartCount={setCartCount} setUserData={setUserData} userData={userData}/>} />
           <Route path="/sign" element={<Sign setUserId={setUserId} />} />
-          <Route path="/cart" element={<Cart products={products}/>}/>
+          <Route path="/checkout" element={<Checkout setUserId={setUserId} />} />
+          <Route path="/cart" element={<Cart products={products} userData={userData} setCartCount={setCartCount} />} />
+          <Route path="/orders" element={<OrdersList products={products} userData={userData} setCartCount={setCartCount} />} />
         </Routes>
       </Router>
       {/* <Footer /> */}

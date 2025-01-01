@@ -8,7 +8,7 @@ console.log(userRegistration)
 userRouter.post('/register', userRegistration);
 userRouter.post('/login', login);
 userRouter.post('/admin-login', adminLogin);
-userRouter.get('/user-details/:userId', userDetails);
-// userRouter.get('/user-details',verifyToken, userDetails);
+// userRouter.get('/user-details/:userId', userDetails);
+userRouter.get('/user-details/:userId',verifyToken, userDetails);
 
 export { userRouter };

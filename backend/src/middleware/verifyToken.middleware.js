@@ -13,8 +13,8 @@ const verifyToken = asyncHandler(async (req, res, next) => {
         return next(); 
     } catch (err) {
         
-       console.log(err)
-        return res.status(401).json(new ApiResponse(401, null, 'Invalid token'));
+       console.log(err, "1")
+        return res.status(200).json(new ApiResponse(401, null, 'Invalid token'));
     }
 });
 

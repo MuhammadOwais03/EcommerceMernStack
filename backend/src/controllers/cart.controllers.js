@@ -82,9 +82,21 @@ const removeCart = asyncHandler(async (req, res) => {
 
 
     user.cartData = user_cart;
-    await user.save();
+    const modified_user = await User.findByIdAndUpdate(
+        userId,
+        { $set: { cartData: user_cart } },
+        { new: true }
+    );
 
-    return res.status(200).json({ message: "Product removed from cart", cartData: user_cart, status: 200 });
+    let cartCount = 0;
+    for (let key in modified_user.cartData) {
+        cartCount += Object.keys(modified_user.cartData[key]).length;
+    }
+
+    console.log("User:", modified_user);
+    // await user.save();
+
+    return res.status(200).json({ message: "Product removed from cart", cartData: user_cart, status: 200, cartCount: cartCount});
 });
 
 
@@ -100,7 +112,9 @@ const getCart = asyncHandler(async (req, res) => {
 })
 
 const updateCart = asyncHandler(async (req, res) => {
+
     const { userId, productId, sizeType, quantity } = req.body;
+    console.log("Request body:", req.body);
 
     const user = await User.findById(userId);
     if (!user) {
@@ -111,7 +125,7 @@ const updateCart = asyncHandler(async (req, res) => {
 
     if (user_cart[productId]) {
         if (user_cart[productId][sizeType]) {
-            user_cart[productId][sizeType] += quantity;
+            user_cart[productId][sizeType] = quantity;
         } else {
             user_cart[productId][sizeType] = quantity;
         }

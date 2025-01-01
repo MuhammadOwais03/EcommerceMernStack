@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../components/styles/collections.css';
-
+import { Link } from "react-router-dom";
 import menu_icon from "../assets/menu_icon.png";
 
 const Collections = ({ products }) => {
@@ -98,7 +98,7 @@ const Collections = ({ products }) => {
           <div className="collections-flex">
             {filteredCollections.length > 0 ? (
               filteredCollections.map((item, index) => (
-                <a key={index} className="collection-card" href={`/product/${item._id}`}>
+                <Link key={index} className="collection-card" to={`/product/${item._id}`}>
                   <img
                     src={item.images ? item.images[0] : item.image}
                     alt={item.name}
@@ -106,7 +106,7 @@ const Collections = ({ products }) => {
                   />
                   <h3 className="collection-card-name">{item.name}</h3>
                   <p className="collection-card-price">${item.price}</p>
-                </a>
+                </Link>
               ))
             ) : (
               <p>No products found matching the selected filters.</p>

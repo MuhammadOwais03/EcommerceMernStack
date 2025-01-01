@@ -8,7 +8,7 @@ import p_img40 from "../src/assets/p_img40.png";
 import p_img45 from "../src/assets/p_img45.png";
 import p_img48 from "../src/assets/p_img48.png";
 import p_img52 from "../src/assets/p_img52.png";
-
+import { Link } from "react-router-dom";
 
 
 const BestSellers = ({products}) => {
@@ -30,7 +30,7 @@ const BestSellers = ({products}) => {
             </p>
             <div className="collections-grid">
                 {collections.map((item, index) => (
-                    <a key={index} className="collection-item" href={`/product/${item._id}`}>
+                    <Link key={index} className="collection-item" to={`/product/${item._id}`}>
                         <img
                             src={item.images[0]}
                             alt={item.name}
@@ -38,7 +38,7 @@ const BestSellers = ({products}) => {
                         />
                         <h3 className="collection-name">{item.name}</h3>
                         <p className="collection-price">{item.price}</p>
-                    </a>
+                    </Link>
                 ))}
             </div>
         </div>
