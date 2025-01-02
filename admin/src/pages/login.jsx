@@ -79,12 +79,8 @@ function Sign({setMyLocalStorageValue}) {
           {/* Error Message */}
           {error && <div className="error-message">{error}</div>}
 
-          {/* Links */}
-          <div className="form-links">
-            <a href="#" className="form-link">
-              Forgot your password?
-            </a>
-          </div>
+          
+          
 
           {/* Submit Button */}
           <button type="submit" className="form-button">

@@ -7,6 +7,7 @@ const Navbar = ({setMyLocalStorageValue}) => {
   const onLogout = () => {
     console.log('Logout');
     setMyLocalStorageValue(null);
+    localStorage.removeItem('accessToken');
 
   }
   return (

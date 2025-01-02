@@ -50,6 +50,7 @@
 .other {
   
   width: 77%;
-  height: 100vh;
-  border-left: 1px solid #000;
+  /* height: 100vh; */
+  /* border-left: 1px solid #000; */
+  border-left: 0.5px solid black;
 }

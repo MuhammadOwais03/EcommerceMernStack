@@ -4,6 +4,7 @@ import p_img1 from '../assets/p_img1.png'
 import { fetchData } from "../../server";
 import { TotalContext } from "../TotalContext";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 const Cart = ({ products, userData, setCartCount }) => {
@@ -81,9 +82,13 @@ const Cart = ({ products, userData, setCartCount }) => {
 
                 } else {
                     console.error("Failed to update item quantity:", response?.message || "Unknown error");
+                    toast.error("An error occurred while updating the item quantity. Please try again.");
                 }
             })
-            .catch((error) => console.error("Error updating item:", error));
+            .catch((error) => { 
+                console.error("Error updating item:", error); 
+                toast.error("An error occurred while updating the item. Please try again.");
+            });
     };
 
 
@@ -105,6 +110,7 @@ const Cart = ({ products, userData, setCartCount }) => {
                 if (response?.status === 200) {
                     setCartItems((prevItems) => prevItems.filter((item) => item.id + item.size !== id + size));
                     setCartCount(response.cartCount);
+                    toast.success('Item removed from cart');
                     console.log("Item removed successfully", response);
                 } else {
                     console.error("Failed to remove item:", response?.message || "Unknown error");
@@ -112,6 +118,7 @@ const Cart = ({ products, userData, setCartCount }) => {
             })
             .catch((error) => {
                 console.error("Error while removing item:", error);
+                toast.error("An error occurred while removing the item. Please try again.");
             });
 
 

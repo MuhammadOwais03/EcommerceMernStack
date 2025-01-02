@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../../components/styles/sign.css";
 import { fetchData, stack } from "../../server";
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function Sign({setUserId}) {
   const [isSignUp, setIsSignUp] = useState(true); // State to toggle between Sign Up and Login
@@ -30,6 +31,9 @@ function Sign({setUserId}) {
         password:password,
         password2:confirmPassword
       }
+
+
+      console.log(data);
 
       fetchData('users/register',data,'POST').then((response) => {
         console.log(response);
@@ -65,7 +69,8 @@ function Sign({setUserId}) {
           }
         }
         else {
-          alert(response.message);
+          toast.error(response.message);
+          
         }
       }).catch((error) => {
         console.error('Error logging in:',error);

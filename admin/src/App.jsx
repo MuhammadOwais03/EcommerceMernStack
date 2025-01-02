@@ -9,6 +9,7 @@ import { Sidebar } from './components/Sidebar';
 import AddItems from './pages/AddItems';
 import Sign from './pages/login';
 import ListItems from './pages/listItems';
+import Orders from './pages/Orders';
 
 
 function App() {
@@ -40,7 +41,7 @@ function App() {
                 <Routes>
                   <Route path="/add" element={<AddItems myLocalStorageValue={myLocalStorageValue} />} />
                   <Route path="/list" element={<ListItems myLocalStorageValue={myLocalStorageValue}/>} />
-                  <Route path="/orders" element={<h1>Orders</h1>} />
+                  <Route path="/orders" element={<Orders/>} />
                 </Routes>
               </div>
             </div>

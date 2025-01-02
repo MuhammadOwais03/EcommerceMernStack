@@ -1,0 +1,129 @@
+.orders-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 10px;
+    width: 100%;
+}
+
+.order {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px;
+    padding: 15px;
+    /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
+    background-color: #f3f1f1;
+    border-radius: 5px;
+    width: 90%;
+    box-sizing: border-box;
+    line-height: 1;
+}
+
+.order-logo img {
+    width: 40px;
+    height: 40px;
+}
+
+.order-item-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin: 10px;
+    line-height: 1px;
+    /* flex: 2; */
+}
+
+.order-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* flex: 1; */
+}
+
+.order-details ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.order-details ul li {
+    font-size: 12px;
+    margin: 2px 0;
+}
+
+.order-price {
+    font-size: 14px;
+    font-weight: bold;
+    /* flex: 0.5; */
+}
+
+.order-actions select {
+    outline: none;
+    font-size: 12px;
+    height: 30px;
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    /* flex: 1; */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .order {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .order-item-detail, 
+    .order-details, 
+    .order-price, 
+    .order-actions {
+        width: 100%;
+        margin: 5px 0;
+        text-align: left;
+    }
+
+
+    .order-details {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        flex: 1;
+    }
+
+    .order-logo {
+        margin-bottom: 10px;
+    }
+
+    .order-logo img {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .order {
+        padding: 10px;
+    }
+
+    .order-details ul li {
+        font-size: 10px;
+    }
+
+    .order-price {
+        font-size: 12px;
+    }
+
+    .order-actions select {
+        font-size: 10px;
+        height: 25px;
+    }
+}

@@ -2,7 +2,9 @@
 
 
 export const fetchData = async (url, data = null, method = 'GET', token = null) => {
-    const fullUrl = `http://localhost:5000/api/${url}`;
+    const fullUrl = `http://192.168.100.11:5000/api/${url}`;
+
+    console.log("in server",data)
 
     const options = {
         method,
@@ -30,7 +32,7 @@ export const fetchData = async (url, data = null, method = 'GET', token = null) 
         }
         return response.json();
     } catch (error) {
-        console.log('Error fetching data:', error.message);
+        console.log('Error fetching data:', error.status);
     }
 };
 

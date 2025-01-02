@@ -1,20 +1,81 @@
 import React, { useState, useContext } from "react";
 import "../../components/styles/checkout.css";
-import stripe_logo from '../assets/stripe_logo.png';
+import stripe_logo from "../assets/stripe_logo.png";
 import { TotalContext } from "../TotalContext";
+import { fetchData } from "../../server";
+import { toast } from "react-toastify";
+import { useNavigate, useParams } from 'react-router-dom';
 
-const Checkout = () => {
-    const { total } = useContext(TotalContext);
-  const [paymentMethod, setPaymentMethod] = useState("cash-on-delivery");
+const Checkout = ({setOrders, setCartCount}) => {
+  const navigation = useNavigate();
+  const { total } = useContext(TotalContext);
+  const [order, setOrder] = useState({
+    userId: localStorage.getItem("userId"),
+    deliveryInfo: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      street: "",
+      city: "",
+      state: "",
+      zipcode: "",
+      country: "",
+      phone: "",  
+    },
+    paymentMethod: "cash-on-delivery",
+    cartSummary: {
+      subtotal: total - 10,
+      shippingFee: 10,
+      total: total,
+    },
+  });
 
-  console.log("Total in Checkout:", total);
+  console.log("Order State:", order);
+
+  const handleDeliveryChange = (e) => {
+    const { name, value } = e.target;
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      deliveryInfo: {
+        ...prevOrder.deliveryInfo,
+        [name]: value,
+      },
+    }));
+  };
 
   const handlePaymentChange = (method) => {
-    setPaymentMethod(method);
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      paymentMethod: method,
+    }));
   };
 
   const handlePlaceOrder = () => {
-    alert(`Order placed with ${paymentMethod} payment method!`);
+    // alert(`Order placed with ${order.paymentMethod} payment method!`);
+    console.log("Order Details:", order);
+
+    let accessToken = localStorage.getItem("accessToken");
+
+    fetchData("orders/create-order", order, "POST", accessToken).then(
+      (response) => {
+        console.log(response);
+        if (response.status === 201) {
+          console.log("201")
+          setOrders(response.order);
+          setCartCount(0)
+          toast.success("Order placed successfully!");
+          alert("Order placed successfully!");
+          // navigation("/orders");
+        } else {
+          console.log("400")
+          toast.error(response.message);
+        }
+  }).catch((error) => {
+    console.error("Error placing order:", error);
+    toast.error("An error occurred while placing the order. Please  try again.");
+  }); 
+      
+
   };
 
   return (
@@ -25,20 +86,74 @@ const Checkout = () => {
         </h2>
         <form className="delivery-form">
           <div className="form-row">
-            <input type="text" placeholder="First name" />
-            <input type="text" placeholder="Last name" />
+            <input
+              type="text"
+              placeholder="First name"
+              name="firstName"
+              value={order.deliveryInfo.firstName}
+              onChange={handleDeliveryChange}
+            />
+            <input
+              type="text"
+              placeholder="Last name"
+              name="lastName"
+              value={order.deliveryInfo.lastName}
+              onChange={handleDeliveryChange}
+            />
           </div>
-          <input type="email" placeholder="Email address" />
-          <input type="text" placeholder="Street" />
+          <input
+            type="email"
+            placeholder="Email address"
+            name="email"
+            value={order.deliveryInfo.email}
+            onChange={handleDeliveryChange}
+          />
+          <input
+            type="text"
+            placeholder="Street"
+            name="street"
+            value={order.deliveryInfo.street}
+            onChange={handleDeliveryChange}
+          />
           <div className="form-row">
-            <input type="text" placeholder="City" />
-            <input type="text" placeholder="State" />
+            <input
+              type="text"
+              placeholder="City"
+              name="city"
+              value={order.deliveryInfo.city}
+              onChange={handleDeliveryChange}
+            />
+            <input
+              type="text"
+              placeholder="State"
+              name="state"
+              value={order.deliveryInfo.state}
+              onChange={handleDeliveryChange}
+            />
           </div>
           <div className="form-row">
-            <input type="text" placeholder="Zipcode" />
-            <input type="text" placeholder="Country" />
+            <input
+              type="text"
+              placeholder="Zipcode"
+              name="zipcode"
+              value={order.deliveryInfo.zipcode}
+              onChange={handleDeliveryChange}
+            />
+            <input
+              type="text"
+              placeholder="Country"
+              name="country"
+              value={order.deliveryInfo.country}
+              onChange={handleDeliveryChange}
+            />
           </div>
-          <input type="text" placeholder="Phone" />
+          <input
+            type="text"
+            placeholder="Phone"
+            name="phone"
+            value={order.deliveryInfo.phone}
+            onChange={handleDeliveryChange}
+          />
         </form>
       </div>
 
@@ -49,15 +164,15 @@ const Checkout = () => {
           </h2>
           <div className="totals-item">
             <span>Subtotal</span>
-            <span>{total - 10}</span>
+            <span>{order.cartSummary.subtotal}</span>
           </div>
           <div className="totals-item">
             <span>Shipping Fee</span>
-            <span>$10.00</span>
+            <span>${order.cartSummary.shippingFee}.00</span>
           </div>
           <div className="totals-item total">
             <span>Total</span>
-            <span>{total}</span>
+            <span>{order.cartSummary.total}</span>
           </div>
         </div>
 
@@ -68,18 +183,17 @@ const Checkout = () => {
           <div className="payment-options">
             <button
               type="button"
-              className={paymentMethod === "stripe" ? "active" : ""}
+              className={order.paymentMethod === "stripe" ? "active" : ""}
               onClick={() => handlePaymentChange("stripe")}
             >
-              <img
-                src={stripe_logo}
-                alt="Stripe"
-              />
+              <img src={stripe_logo} alt="Stripe" />
             </button>
-            
+
             <button
               type="button"
-              className={paymentMethod === "cash-on-delivery" ? "active" : ""}
+              className={
+                order.paymentMethod === "cash-on-delivery" ? "active" : ""
+              }
               onClick={() => handlePaymentChange("cash-on-delivery")}
             >
               CASH ON DELIVERY

@@ -9,6 +9,22 @@ const Collections = ({ products }) => {
   const [filterSubCategories, setFilterSubCategories] = useState([]);
   const [filteredCollections, setFilteredCollections] = useState(products);
 
+  const [sortOption, setSortOption] = useState("newest");
+
+  const handleSortChange = (e) => {
+    const value = e.target.value;
+    setSortOption(value);
+
+    let sortedCollections = [...products];
+    if (value === "price_low") {
+      sortedCollections.sort((a, b) => a.price - b.price);
+    } else if (value === "price_high") {
+      sortedCollections.sort((a, b) => b.price - a.price);
+    }
+    setFilteredCollections(sortedCollections);
+  };
+
+
   const openMenu = () => setMenuOpen(true);
   const closeMenu = () => setMenuOpen(false);
 
@@ -88,7 +104,7 @@ const Collections = ({ products }) => {
               All<span>Collections</span><span className="line"></span>
             </div>
             <div className="sort-by">
-              <select name="sort-by" id="sort-by">
+              <select name="sort-by" id="sort-by" onChange={handleSortChange}>
                 <option value="newest">Sort by Relevant</option>
                 <option value="price_low">Sort by Low to High</option>
                 <option value="price_high">Sort by High to Low</option>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../../components/styles/product.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchData, stack } from '../../server';
+import { toast } from 'react-toastify';
 
 export const Product = ({ userId, setCartCount, setUserData, userData }) => {
     const { id } = useParams();
@@ -78,7 +79,8 @@ export const Product = ({ userId, setCartCount, setUserData, userData }) => {
 
                     setUserData(updatedUserData); // Update state with new data
                     console.log("3 - User data state updated");
-                    alert('Product added to cart');
+                    
+                    toast.success('Product added to cart');
                 }
 
                 else if (response.statusCode === 401) {

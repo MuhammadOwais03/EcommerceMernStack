@@ -54,18 +54,18 @@ const login = asyncHandler(async (req, res) => {
 
     if (!userCheck) {
         
-        res.status(404).json({"No user found with this email": email, "status": 404});
+        res.status(200).json({message:"No user found with this email "+ email, "status": 404});
     }
 
     const passCheck = await userCheck.comparePassword(password);
 
     if (!passCheck) {
-        res.status(401).json({"Invalid User Credentials": email, "status": 401});
+        res.status(200).json({message:"Invalid User Credentials "+ email, "status": 401});
     }
 
     const { accessToken, refreshToken } = await generateToken(userCheck._id, userCheck.email);
     if (!accessToken || !refreshToken) {
-        res.status(500).json({"An error occurred while authenticating the user": email, "status": 500});
+        res.status(500).json({message:"An error occurred while authenticating the user "+ email, "status": 500});
     }
     userCheck.refreshToken = refreshToken;
     await userCheck.save();

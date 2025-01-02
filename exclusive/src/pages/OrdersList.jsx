@@ -1,21 +1,9 @@
 import React from "react";
 import "../../components/styles/ordersList.css";
 
-const OrdersList = () => {
-  const orders = [
-    {
-      id: 1,
-      image: "https://via.placeholder.com/100", // Replace with actual image URL
-      name: "Men Round Neck Pure Cotton T-shirt",
-      price: "$64",
-      quantity: 1,
-      size: "XXL",
-      date: "Wed Jan 01 2025",
-      payment: "COD",
-      status: "Shipped",
-    },
-  ];
+const OrdersList = ({ orders }) => {
 
+  console.log(orders); // logs all the orders with products
   return (
     <div className="orders-container">
       <h2>
@@ -23,23 +11,39 @@ const OrdersList = () => {
       </h2>
       <div className="orders-list">
         {orders.map((order) => (
-          <div className="order-item" key={order.id}>
-            <img src={order.image} alt={order.name} className="order-image" />
-            <div className="order-details">
-              <h3>{order.name}</h3>
-              <p>
-                {order.price} &nbsp; Quantity: {order.quantity} &nbsp; Size:{" "}
-                {order.size}
-              </p>
-              <p>Date: {order.date}</p>
-              <p>Payment: {order.payment}</p>
+          <React.Fragment key={order._id}>
+            <div className="order-header">
+              <h2>Order: {new Date(order.createdAt).toLocaleString()}</h2>
+              <p>Order Total: ${order.orderTotal}</p>
             </div>
-            <div className="order-status">
-              <span className="status-dot"></span>
-              {order.status}
-            </div>
-            <button className="track-order-btn">Track Order</button>
-          </div>
+            {order.products.map((item) => (
+              <div className="order-item" key={item.product._id}>
+                <img
+                  src={item.product.images?.[0] || "https://via.placeholder.com/100"}
+                  alt={item.product.name || "Product Image"}
+                  className="order-image"
+                />
+                <div className="order-details">
+                  <h3>{item.product.name || "Product Name"}</h3>
+                  <p>
+                    {item.product.price ? `$${item.product.price}` : "Price Unavailable"} &nbsp;
+                    Quantity: {item.quantity || 0} &nbsp;
+                    Size: {item.size || "N/A"}
+                  </p>
+                  <p>Date: {new Date(order.createdAt).toDateString()}</p>
+                  <p>Payment: {order.paymentMethod}</p>
+                </div>
+                <div className="order-status">
+                  <span className={`status-dot ${order.orderStatus.toLowerCase()}`}></span>
+                  {order.orderStatus}
+                </div>
+                <div className="order-footer">
+                  <button className="track-order-btn">Track Order</button>
+                </div>
+              </div>
+            ))}
+
+          </React.Fragment>
         ))}
       </div>
     </div>

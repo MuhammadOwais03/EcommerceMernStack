@@ -14,6 +14,9 @@ import { Product } from './pages/Product';
 import Sign from './pages/Sign';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import ProfilePage from './pages/profile';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 import { fetchData } from '../server';
 
@@ -24,8 +27,10 @@ const App = () => {
   const [cartCount, setCartCount] = useState(0);
   const [userData, setUserData] = useState({});
   const [isLogin, setIsLogin] = useState(false);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
+    console.log('Fetching products...');
     fetchData('products/all-product')
       .then(data => {
         console.log(data);
@@ -38,7 +43,7 @@ const App = () => {
       });
 
     fetchData('users/user-details/' + localStorage.getItem('userId'), null, 'GET', localStorage.getItem('accessToken')).then((response) => {
-      
+
       console.log(response)
 
       if (response.statusCode === 200) {
@@ -52,9 +57,26 @@ const App = () => {
       console.error('Error fetching cart:', error);
     });
 
+
+    fetchData('orders/get-orders/' + localStorage.getItem('userId'), null, 'GET', localStorage.getItem('accessToken')).then((response) => {
+      console.log(response)
+      if (response.status === 200) {
+        console.log(response.orders);
+        setOrders(response.orders);
+      }
+    }).catch((error) => {
+      console.error('Error fetching orders:', error);
+    });
+
     setUserId(localStorage.getItem('userId'));
 
-  }, []);
+  }, [userId, isLogin, cartCount]);
+
+  useEffect(() => {
+    console.log('orders:', orders);
+  }, [products]);
+
+  
 
   if (loading) {
     // Show a loading indicator while data is being fetched
@@ -68,15 +90,20 @@ const App = () => {
   return (
     <>
       <Router>
-        <Navbar cartCount={cartCount} isLogin={isLogin}/>
+        <div>
+          <ToastContainer />
+        </div>
+
+        <Navbar setProducts={setProducts} products={products} cartCount={cartCount} isLogin={isLogin} setUserId={setUserId} setUserData={setUserData} setCartCount={setCartCount} setIsLogin={setIsLogin} />
         <Routes>
           <Route path="/" element={<Home products={products} />} />
           <Route path="/collections" element={<Collections products={products} />} />
-          <Route path="/product/:id" element={<Product userId={userId} setCartCount={setCartCount} setUserData={setUserData} userData={userData}/>} />
-          <Route path="/sign" element={<Sign setUserId={setUserId} />} />
-          <Route path="/checkout" element={<Checkout setUserId={setUserId} />} />
+          <Route path="/product/:id" element={<Product userId={userId} setCartCount={setCartCount} setUserData={setUserData} userData={userData} />} />
+          <Route path="/sign" element={<Sign setUserId={setUserId} setCartCount={setCartCount} />} />
+          <Route path="/checkout" element={<Checkout setUserId={setUserId} setOrders={setOrders} setCartCount={setCartCount} />} />
           <Route path="/cart" element={<Cart products={products} userData={userData} setCartCount={setCartCount} />} />
-          <Route path="/orders" element={<OrdersList products={products} userData={userData} setCartCount={setCartCount} />} />
+          <Route path="/orders" element={<OrdersList products={products} userData={userData} setCartCount={setCartCount} orders={orders} />} />
+          <Route path="/profile" element={<ProfilePage setUserId={setUserId} setCartCount={setCartCount} userData={userData} />} />
         </Routes>
       </Router>
       {/* <Footer /> */}

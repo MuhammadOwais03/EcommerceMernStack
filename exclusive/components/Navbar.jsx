@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles/navbar.css';
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
-const Navbar = ({ cartCount, isLogin }) => {
+const Navbar = ({ setProducts, products, cartCount, isLogin, setUserId, setUserData, setCartCount, setIsLogin }) => {
     const [search, setSearch] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchProducts, setSearchProducts] = useState([]);
+
+    useEffect(()=>{
+        setSearchProducts(products);
+    }, [])
 
     const searchOpen = () => {
         setSearch((prev) => !prev);
@@ -17,6 +23,34 @@ const Navbar = ({ cartCount, isLogin }) => {
 
     const toggleDropdown = () => {
         setDropdownOpen((prev) => !prev);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('userId');
+        setUserId(null);
+        setUserData({});
+        setCartCount(0);
+        setIsLogin(false);
+        Navigate('/sign');
+    };
+
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+
+        if (value.trim() === "") {
+            console.log("1")
+            // Restore the original product list when search is cleared
+            setProducts(searchProducts);
+        } else {
+            console.log("2")
+            // Filter the products
+            const filteredProducts = searchProducts.filter((product) =>
+                product.name.toLowerCase().includes(value.toLowerCase())
+            );
+            setProducts(filteredProducts);
+        }
     };
 
     return (
@@ -44,6 +78,7 @@ const Navbar = ({ cartCount, isLogin }) => {
                                     <>
                                         <Link to="/profile">Profile</Link>
                                         <Link to="/orders">Orders</Link>
+                                        <Link to="/" onClick={handleLogout}>Logout</Link>
                                     </>
                                 ) : (
                                     <>
@@ -61,7 +96,12 @@ const Navbar = ({ cartCount, isLogin }) => {
                 </div>
             </div>
             <div className={`search-input ${search ? 'active' : ''}`}>
-                <input type="text" />
+                <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    placeholder="Search products..."
+                />
                 <i className="fa-solid fa-magnifying-glass"></i>
             </div>
         </nav>
