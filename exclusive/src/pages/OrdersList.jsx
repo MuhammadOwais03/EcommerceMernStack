@@ -1,7 +1,12 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "../../components/styles/ordersList.css";
 
-const OrdersList = ({ orders }) => {
+const OrdersList = ({setMenuOpen, orders }) => {
+
+
+  useEffect(()=>{
+    setMenuOpen(false)
+    },[])
 
   console.log(orders); // logs all the orders with products
   return (

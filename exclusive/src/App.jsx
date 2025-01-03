@@ -15,6 +15,8 @@ import Sign from './pages/Sign';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import ProfilePage from './pages/profile';
+import AboutUs from './pages/AboutUs';
+import ContactUs from './pages/ContactUs';
 import { ToastContainer, toast } from 'react-toastify';
 
 
@@ -28,6 +30,7 @@ const App = () => {
   const [userData, setUserData] = useState({});
   const [isLogin, setIsLogin] = useState(false);
   const [orders, setOrders] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     console.log('Fetching products...');
@@ -94,16 +97,18 @@ const App = () => {
           <ToastContainer />
         </div>
 
-        <Navbar setProducts={setProducts} products={products} cartCount={cartCount} isLogin={isLogin} setUserId={setUserId} setUserData={setUserData} setCartCount={setCartCount} setIsLogin={setIsLogin} />
+        <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} setProducts={setProducts} products={products} cartCount={cartCount} isLogin={isLogin} setUserId={setUserId} setUserData={setUserData} setCartCount={setCartCount} setIsLogin={setIsLogin} />
         <Routes>
-          <Route path="/" element={<Home products={products} />} />
-          <Route path="/collections" element={<Collections products={products} />} />
-          <Route path="/product/:id" element={<Product userId={userId} setCartCount={setCartCount} setUserData={setUserData} userData={userData} />} />
-          <Route path="/sign" element={<Sign setUserId={setUserId} setCartCount={setCartCount} />} />
-          <Route path="/checkout" element={<Checkout setUserId={setUserId} setOrders={setOrders} setCartCount={setCartCount} />} />
-          <Route path="/cart" element={<Cart products={products} userData={userData} setCartCount={setCartCount} />} />
-          <Route path="/orders" element={<OrdersList products={products} userData={userData} setCartCount={setCartCount} orders={orders} />} />
-          <Route path="/profile" element={<ProfilePage setUserId={setUserId} setCartCount={setCartCount} userData={userData} />} />
+          <Route path="/" element={<Home products={products} setMenuOpen={setMenuOpen} />} />
+          <Route path="/collections" element={<Collections products={products} setMenu={setMenuOpen} />} />
+          <Route path="/product/:id" element={<Product setMenuOpen={setMenuOpen} userId={userId} setCartCount={setCartCount} setUserData={setUserData} userData={userData} />} />
+          <Route path="/sign" element={<Sign setMenuOpen={setMenuOpen} setUserId={setUserId} setCartCount={setCartCount} />} />
+          <Route path="/checkout" element={<Checkout setMenuOpen={setMenuOpen} setUserId={setUserId} setOrders={setOrders} setCartCount={setCartCount} />} />
+          <Route path="/cart" element={<Cart isLogin={isLogin} setMenuOpen={setMenuOpen} products={products} userData={userData} setCartCount={setCartCount} />} />
+          <Route path="/orders" element={<OrdersList setMenuOpen={setMenuOpen} products={products} userData={userData} setCartCount={setCartCount} orders={orders} />} />
+          <Route path="/profile" element={<ProfilePage setMenuOpen={setMenuOpen} setUserId={setUserId} setCartCount={setCartCount} userData={userData} />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/contact-us" element={<ContactUs />} />
         </Routes>
       </Router>
       {/* <Footer /> */}

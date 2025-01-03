@@ -1,0 +1,93 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .contact-us {
+    padding: 20px;
+    text-align: center;
+    color: #333;
+    
+  }
+  
+  .contact-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  .contact-title span {
+    color: #8b8989; /* Accent color */
+  }
+  
+  /* Flexbox Container */
+  .contact-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    
+  }
+  
+  /* Left Section Styling */
+  .contact-image-container {
+    
+    max-width: 600px;
+    width: 100%;
+  }
+  
+  .contact-image {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  /* Right Section Styling */
+  .contact-details {
+    
+    min-width: 300px;
+    text-align: left;
+  }
+  
+  .store-info, .careers-info {
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  /* Button Styling */
+  .explore-jobs-button {
+    background-color: transparent;
+    border: 1px solid #333;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  
+  .explore-jobs-button:hover {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .contact-container {
+      flex-direction: column;
+    }
+  
+    .contact-details {
+      text-align: center;
+    }
+  }
+  

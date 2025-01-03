@@ -15,7 +15,7 @@
     flex-direction: row;
     gap: 10px;
     color: #6c757d;
-    line-height: 1px;
+    
     margin-top: 5rem;
     gap: 1.4rem;
 }
@@ -50,7 +50,7 @@
 
 /* Individual Item */
 .collection-item {
-    text-align: justify;
+    /* text-align: justify; */
     line-height: 1;
     cursor: pointer;
 }
@@ -67,11 +67,12 @@
 .collection-image:hover {
     transform: scale(1.1);
 }
-
 .collection-name {
     font-size: 1rem;
     font-weight: 500;
     margin-bottom: 0.5rem;
+    word-spacing: 2px;
+    letter-spacing: 0px;
 }
 
 .collection-price {
@@ -88,6 +89,7 @@
 
     .collection-image {
         height: 250px;
+        object-fit: contain;
     }
 
     .collections-title {
@@ -111,16 +113,18 @@
 
     .collection-image {
         height: 200px;
+        object-fit: contain;
     }
 
     .collection-description {
-        font-size: 0.9rem;
+        font-size: 0.4rem;
     }
 }
 
 @media (max-width:530px) {
     .collection-image {
-        height: 400px;
+        height: 269px;
+        object-fit: contain;
     }
 }
 

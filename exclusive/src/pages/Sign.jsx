@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../components/styles/sign.css";
 import { fetchData, stack } from "../../server";
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-function Sign({setUserId}) {
+function Sign({setMenuOpen,setUserId}) {
   const [isSignUp, setIsSignUp] = useState(true); // State to toggle between Sign Up and Login
   
   const [name, setName] = useState('');
@@ -17,6 +17,10 @@ function Sign({setUserId}) {
   const toggleForm = () => {
     setIsSignUp(!isSignUp);
   };
+
+  useEffect(()=>{
+    setMenuOpen(false);
+  },[])
 
 
   const handleSubmit = async (event) => {
@@ -82,7 +86,7 @@ function Sign({setUserId}) {
   return (
     <div className="container">
       <div className="form-wrapper">
-        <h1 className="form-title">{isSignUp ? "Sign Up —" : "Login —"}</h1>
+        <h1 className="form-title">{isSignUp ? "Sign Up" : "Login"} <span className="line"></span> </h1>
         <form onSubmit={handleSubmit}>
           {/* Name Field (only for Sign Up) */}
           {isSignUp && (

@@ -37,7 +37,7 @@ const BestSellers = ({products}) => {
                             className="collection-image"
                         />
                         <h3 className="collection-name">{item.name}</h3>
-                        <p className="collection-price">{item.price}</p>
+                        <p className="collection-price">{item.price}$</p>
                     </Link>
                 ))}
             </div>

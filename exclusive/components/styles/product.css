@@ -76,6 +76,11 @@
     margin-bottom: 20px;
 }
 
+.selected {
+    background-color: #f0f0f0;
+    border: #8a8e91;
+}
+
 .size-options {
     display: flex;
     gap: 10px;

@@ -7,26 +7,14 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 
-const Cart = ({ products, userData, setCartCount }) => {
+const Cart = ({ isLogin, setMenuOpen, products, userData, setCartCount }) => {
     const { total, setTotal } = useContext(TotalContext);
-    const [cartItems, setCartItems] = useState([
-        {
-            id: 1,
-            name: "Kid Tapered Slim Fit Trouser",
-            price: 38,
-            size: "M",
-            quantity: 1,
-            image: p_img1, // Replace with your image URL
-        },
-        {
-            id: 2,
-            name: "Kid Tapered Slim Fit Trouser",
-            price: 38,
-            size: "XXL",
-            quantity: 1,
-            image: p_img1, // Replace with your image URL
-        },
-    ]);
+    const [cartItems, setCartItems] = useState([]);
+
+
+    useEffect(()=>{
+        setMenuOpen(false)
+    },[])
 
     useEffect(() => {
         if (userData?.cartData && products) {
@@ -144,8 +132,23 @@ const Cart = ({ products, userData, setCartCount }) => {
         return newTotal; // Return the total value
     };
     
+    if (isLogin === false) {
+        return (
+            <div className="cart-page-not-logged-in">
+                <h2>Your Cart</h2>
+                <p>Please log in to view your cart</p>
+            </div>
+        );  
+    }
 
-
+    if (cartItems.length === 0) {
+        return (
+            <div className="cart-page-not-in-cart">
+                <h2>Your Cart</h2>
+                <p>Your cart is empty</p>
+            </div>
+        );
+    }
 
 
     return (

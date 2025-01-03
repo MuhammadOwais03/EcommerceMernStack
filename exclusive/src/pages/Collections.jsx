@@ -3,7 +3,7 @@ import '../../components/styles/collections.css';
 import { Link } from "react-router-dom";
 import menu_icon from "../assets/menu_icon.png";
 
-const Collections = ({ products }) => {
+const Collections = ({ setMenu, products }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [filterCategories, setFilterCategories] = useState([]);
   const [filterSubCategories, setFilterSubCategories] = useState([]);
@@ -23,6 +23,11 @@ const Collections = ({ products }) => {
     }
     setFilteredCollections(sortedCollections);
   };
+
+  useEffect(()=>{
+    console.log("IIII")
+    // setMenu(false)
+  },[])
 
 
   const openMenu = () => setMenuOpen(true);
@@ -91,7 +96,7 @@ const Collections = ({ products }) => {
           <span className="line-filter"></span>
           <div className="filter-by-type">
             <ul>
-              <li><h3>Subcategories</h3></li>
+              <li><h3>Sub Categories</h3></li>
               <li><input type="checkbox" value="Topwear" onChange={filterByCategory} /><p>Topwear</p></li>
               <li><input type="checkbox" value="Bottomwear" onChange={filterByCategory} /><p>Bottomwear</p></li>
               <li><input type="checkbox" value="Winterwear" onChange={filterByCategory} /><p>Winterwear</p></li>

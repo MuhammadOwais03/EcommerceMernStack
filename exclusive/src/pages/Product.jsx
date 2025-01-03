@@ -4,13 +4,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchData, stack } from '../../server';
 import { toast } from 'react-toastify';
 
-export const Product = ({ userId, setCartCount, setUserData, userData }) => {
+export const Product = ({ setMenuOpen, userId, setCartCount, setUserData, userData }) => {
     const { id } = useParams();
     const [mainImage, setMainImage] = useState('');
     const [product, setProduct] = useState({});
     const [sizes, setSizes] = useState([]); // To store parsed sizes
     const [selectedSize, setSelectedSize] = useState(''); // Store selected size
     const navigation = useNavigate();
+
+
+    useEffect(()=>{
+        setMenuOpen(false)
+    },[])
 
     useEffect(() => {
         const data = { id: id };

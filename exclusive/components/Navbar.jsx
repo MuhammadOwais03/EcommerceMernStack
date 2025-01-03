@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './styles/navbar.css';
 import { Link, Navigate } from "react-router-dom";
 
-const Navbar = ({ setProducts, products, cartCount, isLogin, setUserId, setUserData, setCartCount, setIsLogin }) => {
+const Navbar = ({menuOpen, setMenuOpen, setProducts, products, cartCount, isLogin, setUserId, setUserData, setCartCount, setIsLogin }) => {
     const [search, setSearch] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
+    
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [searchProducts, setSearchProducts] = useState([]);
@@ -56,14 +56,14 @@ const Navbar = ({ setProducts, products, cartCount, isLogin, setUserId, setUserD
     return (
         <nav className="navbar">
             <div className="navbar-logo">
-                <h1>FOREVER<span className="dot">.</span></h1>
+                <h1>EXCLUSIVE<span className="dot">.</span></h1>
             </div>
 
             <ul className={`navbar-links ${menuOpen ? 'show' : ''}`}>
                 <li><Link to="/">HOME</Link></li>
                 <li><Link to="/collections">COLLECTION</Link></li>
-                <li><Link to="/about">ABOUT</Link></li>
-                <li><Link to="/contact">CONTACT</Link></li>
+                <li><Link to="/about-us">ABOUT</Link></li>
+                <li><Link to="/contact-us">CONTACT</Link></li>
                 <button className="admin-button">Admin Panel</button>
             </ul>
             <div className="navbar-actions">

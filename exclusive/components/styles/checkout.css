@@ -25,7 +25,7 @@ h2 span {
 }
 
 .delivery-form input {
-    width: 100%;
+    width:96%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ddd;
@@ -98,11 +98,14 @@ h2 span {
     .checkout-container {
         flex-direction: column;
         /* Stack elements vertically */
+        padding: 0px;
+        align-items: center;
+        justify-content: center;
     }
 
     .delivery-info,
     .cart-summary {
-        width: 100%;
+        width: 96%;
         /* Full width on smaller screens */
         margin-bottom: 20px;
         /* Add spacing between sections */
@@ -113,6 +116,10 @@ h2 span {
         /* Stack inputs vertically */
         gap: 0;
         /* Remove extra spacing between rows */
+    }
+
+    .form-row input {
+        width: 96%;
     }
 
     .payment-options button img {

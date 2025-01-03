@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "../../components/styles/checkout.css";
 import stripe_logo from "../assets/stripe_logo.png";
 import { TotalContext } from "../TotalContext";
@@ -6,7 +6,7 @@ import { fetchData } from "../../server";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from 'react-router-dom';
 
-const Checkout = ({setOrders, setCartCount}) => {
+const Checkout = ({setMenuOpen, setOrders, setCartCount}) => {
   const navigation = useNavigate();
   const { total } = useContext(TotalContext);
   const [order, setOrder] = useState({
@@ -31,6 +31,11 @@ const Checkout = ({setOrders, setCartCount}) => {
   });
 
   console.log("Order State:", order);
+
+
+  useEffect(()=>{
+    setMenuOpen(false)
+  }, [])
 
   const handleDeliveryChange = (e) => {
     const { name, value } = e.target;

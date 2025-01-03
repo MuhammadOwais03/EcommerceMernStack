@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../components/styles/profile.css";
 
-const ProfilePage = ({userData}) => {
+const ProfilePage = ({setMenuOpen, userData}) => {
 
     const [customer, setCustomer] = useState({});
      
