@@ -1,6 +1,6 @@
 
 
-const backend_url = "http://192.168.100.11:5000/api"
+const backend_url = "https://exclusive-backend-one.vercel.app/api"
 
 
 

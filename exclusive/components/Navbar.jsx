@@ -64,7 +64,7 @@ const Navbar = ({menuOpen, setMenuOpen, setProducts, products, cartCount, isLogi
                 <li><Link to="/collections">COLLECTION</Link></li>
                 <li><Link to="/about-us">ABOUT</Link></li>
                 <li><Link to="/contact-us">CONTACT</Link></li>
-                <button className="admin-button">Admin Panel</button>
+                {/* <button className="admin-button">Admin Panel</button> */}
             </ul>
             <div className="navbar-actions">
                 <div className="icons">

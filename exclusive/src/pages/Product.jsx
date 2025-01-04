@@ -46,7 +46,7 @@ export const Product = ({ setMenuOpen, userId, setCartCount, setUserData, userDa
     const handleAddToCart = async () => {
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
-            alert('Please login to add to cart');
+            toast.error('Please login to add to cart');
             stack.push('/product/' + id); // Store the current route
             navigation('/sign'); // Redirect to the login page
             return;
