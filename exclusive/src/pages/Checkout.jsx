@@ -6,7 +6,7 @@ import { fetchData } from "../../server";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from 'react-router-dom';
 
-const Checkout = ({setMenuOpen, setOrders, setCartCount}) => {
+const Checkout = ({ setMenuOpen, setOrders, setCartCount }) => {
   const navigation = useNavigate();
   const { total } = useContext(TotalContext);
   const [order, setOrder] = useState({
@@ -20,7 +20,7 @@ const Checkout = ({setMenuOpen, setOrders, setCartCount}) => {
       state: "",
       zipcode: "",
       country: "",
-      phone: "",  
+      phone: "",
     },
     paymentMethod: "cash-on-delivery",
     cartSummary: {
@@ -33,7 +33,7 @@ const Checkout = ({setMenuOpen, setOrders, setCartCount}) => {
   console.log("Order State:", order);
 
 
-  useEffect(()=>{
+  useEffect(() => {
     setMenuOpen(false)
   }, [])
 
@@ -69,17 +69,16 @@ const Checkout = ({setMenuOpen, setOrders, setCartCount}) => {
           setOrders(response.order);
           setCartCount(0)
           toast.success("Order placed successfully!");
-          alert("Order placed successfully!");
           // navigation("/orders");
         } else {
           console.log("400")
           toast.error(response.message);
         }
-  }).catch((error) => {
-    console.error("Error placing order:", error);
-    toast.error("An error occurred while placing the order. Please  try again.");
-  }); 
-      
+      }).catch((error) => {
+        console.error("Error placing order:", error);
+        toast.error("An error occurred while placing the order. Please  try again.");
+      });
+
 
   };
 
