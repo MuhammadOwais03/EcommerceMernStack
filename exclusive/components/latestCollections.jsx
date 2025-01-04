@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import "./styles/LatestCollection.css";
+import "./styles/latestCollection.css";
 
 import p_img6 from "../src/assets/p_img6.png";
 import p_img8 from "../src/assets/p_img8.png";
