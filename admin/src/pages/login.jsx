@@ -3,7 +3,7 @@ import "../components/styles/sign.css";
 import { Navigate } from 'react-router-dom';
 
 
-const backend_url = process.env.BACKEND_URL
+const backend_url = "https://exclusive-backend-one.vercel.app/api"
 
 const postRequest = async (url, data) => {
   const response = await fetch(url, {

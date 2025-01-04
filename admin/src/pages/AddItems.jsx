@@ -3,7 +3,7 @@ import "../components/styles/additems.css"; // Import CSS
 import upload from '../assets/upload.png';
 
 
-const backend_url = process.env.REACT_APP_BACKEND_URL
+const backend_url = "https://exclusive-backend-one.vercel.app/api"
 
 const AddItems = ({ myLocalStorageValue }) => {
     const [formData, setFormData] = useState({

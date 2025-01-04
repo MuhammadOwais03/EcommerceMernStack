@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductList from "../components/ProductList";
 
-const backend_url = process.env.BACKEND_URL
+const backend_url = "https://exclusive-backend-one.vercel.app/api"
 
 const ListItems = ({ myLocalStorageValue }) => {
     const [products, setProducts] = useState(null); // `null` to track loading state
