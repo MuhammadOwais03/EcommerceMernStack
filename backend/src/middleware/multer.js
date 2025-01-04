@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 
 // Ensure the temp directory exists
-const tempDir = path.resolve('./public/temp');
+const tempDir = path.resolve('./tmp');
 if (!fs.existsSync(tempDir)) {
     fs.mkdirSync(tempDir, { recursive: true });
 }
