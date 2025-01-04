@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import box from '../assets/box.png';
 import '../components/styles/order.css';
 
+const backend_url = "https://exclusive-backend-one.vercel.app/api"
+
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [status, setStatus] = useState('Order Placed');
@@ -12,7 +14,7 @@ const Orders = () => {
     let accessToken = localStorage.getItem('accessToken');
 
     const fetchOrders = async () => {
-      const response = await fetch('http://localhost:5000/api/orders/get-all-orders', {
+      const response = await fetch(`${backend_url}/orders/get-all-orders`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -31,7 +33,7 @@ const Orders = () => {
   
     const updateOrders = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/orders/update-order/${id}/${newStatus}`, {
+        const response = await fetch(`${backend_url}/orders/update-order/${id}/${newStatus}`, {
           method: 'PUT',
           headers: {
             Authorization: `Bearer ${accessToken}`,
