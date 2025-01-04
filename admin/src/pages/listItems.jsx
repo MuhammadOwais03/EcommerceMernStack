@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ProductList from "../components/ProductList";
 
+const backend_url = process.env.BACKEND_URL
+
 const ListItems = ({ myLocalStorageValue }) => {
     const [products, setProducts] = useState(null); // `null` to track loading state
     const [isLoading, setIsLoading] = useState(true); // Loader state
@@ -8,7 +10,7 @@ const ListItems = ({ myLocalStorageValue }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("http://localhost:5000/api/products/all-product", {
+                const response = await fetch(`${backend_url}/products/all-product`, {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${myLocalStorageValue}`,
@@ -34,7 +36,7 @@ const ListItems = ({ myLocalStorageValue }) => {
 
     const handleDelete = async (id) => {
         try {
-            const response = await fetch("http://localhost:5000/api/products/delete-product", {
+            const response = await fetch(`${backend_url}/products/delete-product`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${myLocalStorageValue}`,

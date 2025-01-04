@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import "../components/styles/additems.css"; // Import CSS
 import upload from '../assets/upload.png';
 
+
+const backend_url = process.env.REACT_APP_BACKEND_URL
+
 const AddItems = ({ myLocalStorageValue }) => {
     const [formData, setFormData] = useState({
         productName: "",
@@ -82,7 +85,7 @@ const AddItems = ({ myLocalStorageValue }) => {
 
 
         // Make a POST request to the server
-        fetch("http://localhost:5000/api/products/create", {
+        fetch(`${backend_url}/products/create`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${myLocalStorageValue}`,

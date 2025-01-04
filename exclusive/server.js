@@ -1,8 +1,12 @@
 
 
+const backend_url = "http://192.168.100.11:5000/api"
+
+
+
 
 export const fetchData = async (url, data = null, method = 'GET', token = null) => {
-    const fullUrl = `http://192.168.100.11:5000/api/${url}`;
+    const fullUrl = `${backend_url}/${url}`;
 
     console.log("in server",data)
 

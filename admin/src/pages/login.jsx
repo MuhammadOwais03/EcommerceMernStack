@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import "../components/styles/sign.css";
 import { Navigate } from 'react-router-dom';
 
+
+const backend_url = process.env.BACKEND_URL
+
 const postRequest = async (url, data) => {
   const response = await fetch(url, {
     method: "POST",
@@ -31,7 +34,7 @@ function Sign({setMyLocalStorageValue}) {
     console.log("Data:", data); 
     try {
       const response = await postRequest(
-        "http://localhost:5000/api/users/admin-login",
+        `${backend_url}/users/admin-login`,
         data
       );
       console.log("Login Successful:", response);

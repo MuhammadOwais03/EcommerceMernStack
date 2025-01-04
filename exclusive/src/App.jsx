@@ -106,7 +106,7 @@ const App = () => {
           <Route path="/checkout" element={<Checkout setMenuOpen={setMenuOpen} setUserId={setUserId} setOrders={setOrders} setCartCount={setCartCount} />} />
           <Route path="/cart" element={<Cart isLogin={isLogin} setMenuOpen={setMenuOpen} products={products} userData={userData} setCartCount={setCartCount} />} />
           <Route path="/orders" element={<OrdersList setMenuOpen={setMenuOpen} products={products} userData={userData} setCartCount={setCartCount} orders={orders} />} />
-          <Route path="/profile" element={<ProfilePage setMenuOpen={setMenuOpen} setUserId={setUserId} setCartCount={setCartCount} userData={userData} />} />
+          {/* <Route path="/profile" element={<ProfilePage setMenuOpen={setMenuOpen} setUserId={setUserId} setCartCount={setCartCount} userData={userData} />} /> */}
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
         </Routes>

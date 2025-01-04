@@ -76,7 +76,7 @@ const Navbar = ({menuOpen, setMenuOpen, setProducts, products, cartCount, isLogi
                             <div className="user-dropdown">
                                 {isLogin ? (
                                     <>
-                                        <Link to="/profile">Profile</Link>
+                                        {/* <Link to="/profile">Profile</Link> */}
                                         <Link to="/orders">Orders</Link>
                                         <Link to="/" onClick={handleLogout}>Logout</Link>
                                     </>
