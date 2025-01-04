@@ -79,7 +79,7 @@ const App = () => {
     console.log('orders:', orders);
   }, [products]);
 
-  
+
 
   if (loading) {
     // Show a loading indicator while data is being fetched
@@ -110,8 +110,8 @@ const App = () => {
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
         </Routes>
+        <Footer />
       </Router>
-      {/* <Footer /> */}
     </>
   );
 };

@@ -13,12 +13,12 @@
 
 
 .navbar-logout-btn button {
-    background-color: #e63946;
+    background-color: #333;
     color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
 }

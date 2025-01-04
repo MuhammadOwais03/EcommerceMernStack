@@ -50,7 +50,7 @@ function Sign({setMyLocalStorageValue}) {
   return (
     <div className="container">
       <div className="form-wrapper">
-        <h1 className="form-title">Admin Login</h1>
+        <h1 className="form-title">Admin Login <span className="line"></span> </h1>
         <form onSubmit={handleSubmit}>
           {/* Email Field */}
           <div className="form-group">
