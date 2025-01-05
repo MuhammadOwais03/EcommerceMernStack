@@ -100,13 +100,13 @@ const App = () => {
           <Route path="/" element={<Home products={products} setMenuOpen={setMenuOpen} />} />
           <Route path="/collections" element={<Collections products={products} setMenu={setMenuOpen} />} />
           <Route path="/product/:id" element={<Product setMenuOpen={setMenuOpen} userId={userId} setCartCount={setCartCount} setUserData={setUserData} userData={userData} />} />
-          <Route path="/sign" element={<Sign setMenuOpen={setMenuOpen} setUserId={setUserId} setCartCount={setCartCount} />} />
+          <Route path="/sign/:Type" element={<Sign setMenuOpen={setMenuOpen} setUserId={setUserId} setCartCount={setCartCount} setIsLogin={setIsLogin} isLogin={isLogin} />} />
           <Route path="/checkout" element={<Checkout setMenuOpen={setMenuOpen} setUserId={setUserId} setOrders={setOrders} setCartCount={setCartCount} />} />
           <Route path="/cart" element={<Cart isLogin={isLogin} setMenuOpen={setMenuOpen} products={products} userData={userData} setCartCount={setCartCount} />} />
           <Route path="/orders" element={<OrdersList setMenuOpen={setMenuOpen} products={products} userData={userData} setCartCount={setCartCount} orders={orders} />} />
           {/* <Route path="/profile" element={<ProfilePage setMenuOpen={setMenuOpen} setUserId={setUserId} setCartCount={setCartCount} userData={userData} />} /> */}
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/about-us" element={<AboutUs setMenuOpen={setMenuOpen} />} />
+          <Route path="/contact-us" element={<ContactUs setMenuOpen={setMenuOpen} />} />
         </Routes>
         <Footer />
       </Router>

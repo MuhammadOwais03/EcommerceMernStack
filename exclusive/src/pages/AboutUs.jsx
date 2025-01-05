@@ -1,8 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../../components/styles/about.css'
 import about_img from '../assets/about_img.png'
 
-const AboutUs = () => {
+const AboutUs = ({setMenuOpen}) => {
+
+  useEffect(()=>{
+    setMenuOpen(false)
+  },[])
+
   return (
     <div className="about-us">
       <section className="about-us-section">

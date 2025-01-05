@@ -48,12 +48,12 @@ export const Product = ({ setMenuOpen, userId, setCartCount, setUserData, userDa
         if (!accessToken) {
             toast.error('Please login to add to cart');
             stack.push('/product/' + id); // Store the current route
-            navigation('/sign'); // Redirect to the login page
+            navigation('/sign/login'); // Redirect to the login page
             return;
         }
 
         if (!selectedSize) {
-            alert('Please select a size before adding to cart');
+            toast.error('Please select a size before adding to cart');
             return;
         }
 

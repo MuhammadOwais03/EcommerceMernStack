@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import './styles/navbar.css';
 import { Link, Navigate } from "react-router-dom";
 
-const Navbar = ({menuOpen, setMenuOpen, setProducts, products, cartCount, isLogin, setUserId, setUserData, setCartCount, setIsLogin }) => {
+const Navbar = ({ menuOpen, setMenuOpen, setProducts, products, cartCount, isLogin, setUserId, setUserData, setCartCount, setIsLogin }) => {
     const [search, setSearch] = useState(false);
-    
+
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [searchProducts, setSearchProducts] = useState([]);
 
-    useEffect(()=>{
+    useEffect(() => {
         setSearchProducts(products);
     }, [])
 
@@ -32,7 +32,7 @@ const Navbar = ({menuOpen, setMenuOpen, setProducts, products, cartCount, isLogi
         setUserData({});
         setCartCount(0);
         setIsLogin(false);
-        Navigate('/sign');
+        Navigate('/sign/login');
     };
 
     const handleSearchChange = (e) => {
@@ -82,8 +82,8 @@ const Navbar = ({menuOpen, setMenuOpen, setProducts, products, cartCount, isLogi
                                     </>
                                 ) : (
                                     <>
-                                        <Link to="/sign">Login</Link>
-                                        <Link to="/sign">Sign Up</Link>
+                                        <Link to="/sign/login">Login</Link>
+                                        <Link to="/sign/signup">Sign Up</Link>
                                     </>
                                 )}
                             </div>

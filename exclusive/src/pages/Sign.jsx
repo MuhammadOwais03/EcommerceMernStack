@@ -4,9 +4,11 @@ import { fetchData, stack } from "../../server";
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-function Sign({setMenuOpen,setUserId}) {
+
+function Sign({ setMenuOpen, setUserId, setIsLogin, isLogin }) {
   const [isSignUp, setIsSignUp] = useState(true); // State to toggle between Sign Up and Login
-  
+  const { Type } = useParams();
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,53 +20,67 @@ function Sign({setMenuOpen,setUserId}) {
     setIsSignUp(!isSignUp);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
+
+    console.log(Type)
     setMenuOpen(false);
-  },[])
+
+    if (Type.toLowerCase() === 'login') {
+      setIsSignUp(false)
+    } else if (Type.toLowerCase() === 'signup') {
+      setIsSignUp(true)
+    } else {
+      if (!isLogin && isSignUp) {
+        setIsSignUp(false)
+      }
+    }
+
+
+  }, [Type])
 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(name,email,password)
+    console.log(name, email, password)
 
     if (isSignUp) {
       // Sign Up
       const data = {
-        name:name,
-        email:email,
-        password:password,
-        password2:confirmPassword
+        name: name,
+        email: email,
+        password: password,
+        password2: confirmPassword
       }
 
 
       console.log(data);
 
-      fetchData('users/register',data,'POST').then((response) => {
+      fetchData('users/register', data, 'POST').then((response) => {
         console.log(response);
-        if(response.statusCode === 201) {
+        if (response.statusCode === 201) {
           setIsSignUp(false);
         }
         else {
           alert(res.message);
         }
       }).catch((error) => {
-        console.error('Error signing up:',error);
+        console.error('Error signing up:', error);
       });
     }
     else {
       // Login
       const data = {
-        email:email,
-        password:password
+        email: email,
+        password: password
       }
 
-      fetchData('users/login',data,'POST').then((response) => {
+      fetchData('users/login', data, 'POST').then((response) => {
         console.log(response);
-        if(response.statusCode === 200) {
-          localStorage.setItem('accessToken',response.data.accessToken);
+        if (response.statusCode === 200) {
+          localStorage.setItem('accessToken', response.data.accessToken);
           setUserId(response.data.user._id);
-          localStorage.setItem('userId',response.data.user._id);
-          if(stack.length > 0) {
+          localStorage.setItem('userId', response.data.user._id);
+          if (stack.length > 0) {
             const path = stack.pop();
             navigation(path);
           }
@@ -74,10 +90,10 @@ function Sign({setMenuOpen,setUserId}) {
         }
         else {
           toast.error(response.message);
-          
+
         }
       }).catch((error) => {
-        console.error('Error logging in:',error);
+        console.error('Error logging in:', error);
       });
     }
 

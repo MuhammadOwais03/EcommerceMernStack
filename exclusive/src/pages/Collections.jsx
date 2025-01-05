@@ -26,7 +26,7 @@ const Collections = ({ setMenu, products }) => {
 
   useEffect(()=>{
     console.log("IIII")
-    // setMenu(false)
+    setMenu(false)
   },[])
 
 

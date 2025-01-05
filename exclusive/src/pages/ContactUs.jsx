@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../../components/styles/contact.css';
 import contact_img from '../assets/contact_img.png';
 
-const ContactUs = () => {
+const ContactUs = ({setMenuOpen}) => {
+  useEffect(()=>{
+      setMenuOpen(false)
+    },[])
   return (
     <div className="contact-us">
       <h2 className="contact-title">CONTACT <span>US</span></h2>
