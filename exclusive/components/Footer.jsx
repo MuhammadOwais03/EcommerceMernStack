@@ -26,7 +26,7 @@ export const Footer = () => {
           <div className="footer-3">
             <h3>Get In Touch</h3>
             <ul>
-              <li>+1-000-000-0000</li>
+              <li>+923308459668</li>
               <li>owaisiqbal2021@gmail.com</li>
               <li><Link to="https://linkedin.com/in/muhammad-owais-1b782b269/" target="_blank" rel="noopener noreferrer">LinkedIn</Link></li>
 
@@ -34,7 +34,7 @@ export const Footer = () => {
           </div>
         </div>
         <div className="footer-lower" style={{ width: '100%', backgroundColor: '#000', padding: '1px 0', textAlign: 'center', color: '#fff' }}>
-          <p>Copyright 2024 © GreatStack.dev - All Right Reserved.</p>
+          <p>Copyright 2024 © CognitechLabs - All Right Reserved.</p>
         </div>
       </div>
 
