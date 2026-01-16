@@ -82,9 +82,12 @@ const App = () => {
   if (loading) {
     // Show a loading indicator while data is being fetched
     return (
-      <div className="loading">
-        <h2>Loading...</h2>
+     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-gray-900 mb-4"></div>
+        <h2 className="text-xl font-semibold text-gray-900">Loading...</h2>
       </div>
+    </div>
     );
   }
 
